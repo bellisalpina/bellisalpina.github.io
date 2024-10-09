@@ -1,2 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Blog Title</title><link>https://Meekdai.github.io/Gmeek-template</link><description>Blog description</description><copyright>Blog Title</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://Meekdai.github.io/Gmeek-template</link></image><lastBuildDate>Thu, 14 Mar 2024 09:17:29 +0000</lastBuildDate><managingEditor>Blog Title</managingEditor><ttl>60</ttl><webMaster>Blog Title</webMaster><item><title>请接着之后的安装步骤执行</title><link>https://Meekdai.github.io/Gmeek-template/post/qing-jie-zhao-zhi-hou-de-an-zhuang-bu-zou-zhi-xing.html</link><description>如果你点击了`READM.md`的链接后，看到了这个页面，请继续之后的安装步骤执行。</description><guid isPermaLink="true">https://Meekdai.github.io/Gmeek-template/post/qing-jie-zhao-zhi-hou-de-an-zhuang-bu-zou-zhi-xing.html</guid><pubDate>Thu, 14 Mar 2024 09:15:10 +0000</pubDate></item><item><title>这是Gmeek模板仓库</title><link>https://Meekdai.github.io/Gmeek-template/post/zhe-shi-Gmeek-mo-ban-cang-ku.html</link><description>通过这个模板创建库，可以大大减少部署Gmeek博客的配置步骤。</description><guid isPermaLink="true">https://Meekdai.github.io/Gmeek-template/post/zhe-shi-Gmeek-mo-ban-cang-ku.html</guid><pubDate>Wed, 20 Dec 2023 07:42:24 +0000</pubDate></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Blog Title</title><link>https://bellisalpina.github.io</link><description>Blog description</description><copyright>Blog Title</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Wed, 09 Oct 2024 00:54:23 +0000</lastBuildDate><managingEditor>Blog Title</managingEditor><ttl>60</ttl><webMaster>Blog Title</webMaster><item><title>如何在 GitHub 正确地使用 curl 下载文件？</title><link>https://bellisalpina.github.io/post/ru-he-zai-%20GitHub%20-zheng-que-di-shi-yong-%20curl%20-xia-zai-wen-jian-%EF%BC%9F.html</link><description># 如何在 GitHub 正确地使用 curl 下载文件？  &#13;
+&#13;
+下载与原始文件同名的文件的常用语法非常简单：&#13;
+&#13;
+```&#13;
+curl -O URL&#13;
+```&#13;
+&#13;
+这在大多数情况下都有效，但是，有时从 GitHub 或 SourceForge 下载文件时，它不会获取正确的文件  &#13;
+&#13;
+## **使用 curl 正确下载存档文件**  &#13;
+&#13;
+这里的问题是 URL 重定向到实际的存档文件，为此，需要使用其他选项  &#13;
+&#13;
+```&#13;
+curl -JLO URL&#13;
+```&#13;
+&#13;
+选项可以按任何顺序排列  &#13;
+&#13;
+这是基于 curl 命令手册页的选项的快速说明：  &#13;
+&#13;
+- J：此选项告诉 -O, --remote-name 选项使用服务器指定的 Content-Disposition 文件名，而不是从 URL 中提取文件名  &#13;
+- L：如果服务器报告请求的页面已移动到不同的位置（用 Location: 标头和 3XX 响应代码指示），此选项将使 curl 在新位置重做请求  &#13;
+- O：使用此选项，无需指定下载的输出文件名  。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/ru-he-zai-%20GitHub%20-zheng-que-di-shi-yong-%20curl%20-xia-zai-wen-jian-%EF%BC%9F.html</guid><pubDate>Wed, 09 Oct 2024 00:53:53 +0000</pubDate></item></channel></rss>
