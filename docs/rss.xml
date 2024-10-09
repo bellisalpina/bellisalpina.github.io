@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Wed, 09 Oct 2024 02:39:11 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>WireGuard搭建虚拟个人网络</title><link>https://bellisalpina.github.io/post/WireGuard-da-jian-xu-ni-ge-ren-wang-luo.html</link><description># WireGuard搭建虚拟个人网络&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Wed, 09 Oct 2024 02:43:37 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>WireGuard搭建虚拟个人网络</title><link>https://bellisalpina.github.io/post/WireGuard-da-jian-xu-ni-ge-ren-wang-luo.html</link><description># WireGuard搭建虚拟个人网络&#13;
 &#13;
 ### 安装WireGuard&#13;
 ```&#13;
@@ -84,7 +84,7 @@ PublicKey = $(cat server.key.pub)&#13;
 AllowedIPs = 10.0.0.0/24&#13;
 Endpoint = 公网IP:50820&#13;
 PersistentKeepalive = 30' &gt; client1.conf&#13;
-```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/WireGuard-da-jian-xu-ni-ge-ren-wang-luo.html</guid><pubDate>Wed, 09 Oct 2024 02:38:46 +0000</pubDate></item><item><title>如何在 GitHub 正确地使用 curl 下载文件？</title><link>https://bellisalpina.github.io/post/ru-he-zai-%20GitHub%20-zheng-que-di-shi-yong-%20curl%20-xia-zai-wen-jian-%EF%BC%9F.html</link><description># 如何在 GitHub 正确地使用 curl 下载文件？  &#13;
+```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/WireGuard-da-jian-xu-ni-ge-ren-wang-luo.html</guid><pubDate>Wed, 09 Oct 2024 02:38:46 +0000</pubDate></item><item><title>如何在GitHub正确地使用curl下载文件？</title><link>https://bellisalpina.github.io/post/ru-he-zai-GitHub-zheng-que-di-shi-yong-curl-xia-zai-wen-jian-%EF%BC%9F.html</link><description># 如何在 GitHub正确地使用 curl下载文件？  &#13;
 &#13;
 下载与原始文件同名的文件的常用语法非常简单：&#13;
 &#13;
@@ -108,4 +108,4 @@ curl -JLO URL&#13;
 &#13;
 - J：此选项告诉 -O, --remote-name 选项使用服务器指定的 Content-Disposition 文件名，而不是从 URL 中提取文件名  &#13;
 - L：如果服务器报告请求的页面已移动到不同的位置（用 Location: 标头和 3XX 响应代码指示），此选项将使 curl 在新位置重做请求  &#13;
-- O：使用此选项，无需指定下载的输出文件名  。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/ru-he-zai-%20GitHub%20-zheng-que-di-shi-yong-%20curl%20-xia-zai-wen-jian-%EF%BC%9F.html</guid><pubDate>Wed, 09 Oct 2024 00:53:53 +0000</pubDate></item></channel></rss>
+- O：使用此选项，无需指定下载的输出文件名  。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/ru-he-zai-GitHub-zheng-que-di-shi-yong-curl-xia-zai-wen-jian-%EF%BC%9F.html</guid><pubDate>Wed, 09 Oct 2024 00:53:53 +0000</pubDate></item></channel></rss>
