@@ -1,5 +1,67 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Sun, 15 Dec 2024 02:32:25 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>AList 静默运行脚本</title><link>https://bellisalpina.github.io/post/AList%20-jing-mo-yun-xing-jiao-ben.html</link><description># AList 静默运行脚本&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Wed, 12 Mar 2025 12:16:06 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>yt-dlp 常用操作</title><link>https://bellisalpina.github.io/post/yt-dlp%20-chang-yong-cao-zuo.html</link><description># yt-dlp 常用操作
+
+## 更新
+```bash
+# 更新到最新版本
+yt-dlp -U
+```
+
+## 基础使用
+```bash
+# 下载视频（自动选择最佳质量）
+yt-dlp &lt;URL&gt;
+
+# 列出所有可用格式
+yt-dlp -F &lt;URL&gt;
+```
+
+## 常用格式选择器
+
+- `best`/`b`: 选择同时包含视频和音频的最佳质量格式
+- `bestvideo`/`bv`: 选择最佳质量的纯视频格式
+- `bestaudio`/`ba`: 选择最佳质量的纯音频格式
+- `bestvideo*`/`bv*`: 选择包含视频的最佳质量格式（可能也包含音频）
+
+## 格式选择技巧
+
+### 合并音视频流
+```bash
+# 下载并合并最佳视频和音频（默认行为）
+yt-dlp -f 'bv*+ba' &lt;URL&gt;
+
+# 手动指定格式合并（格式号来自-F列表）
+yt-dlp -f 137+140 &lt;URL&gt;
+```
+
+### 比较运算符
+- 数值: `&lt;`, `&lt;=`, `&gt;`, `&gt;=`, `=`, `!=`
+- 字符串: `=`(等于), `^=`(开头是), `$=`(结尾是), `*=`(包含), `~=`(正则匹配)
+- 前缀`!`表示否定
+
+### 过滤条件
+```bash
+# 下载指定编码的视频（例如H.265优先，其次H.264）
+yt-dlp -f 'bv*[vcodec^=hev1]+ba/bv*[vcodec^=avc1]+ba' &lt;URL&gt;
+
+# 下载720p及以下的最佳视频
+yt-dlp -f 'bv*[height&lt;=720]+ba/b[height&lt;=720]' &lt;URL&gt;
+
+# 下载小于500MB的MP4文件
+yt-dlp -f 'b[ext=mp4][filesize&lt;500M]' &lt;URL&gt;
+
+# 下载最佳音频（m4a格式优先）
+yt-dlp -f 'ba[ext=m4a]/ba' &lt;URL&gt;
+```
+
+### 特殊场景
+```bash
+# 需要cookie的网站
+yt-dlp --cookies &lt;FILE&gt; &lt;URL&gt;
+
+# 使用浏览器的cookie（以火狐为例）
+yt-dlp --cookies-from-browser firefox &lt;URL&gt;
+```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/yt-dlp%20-chang-yong-cao-zuo.html</guid><pubDate>Wed, 12 Mar 2025 12:10:34 +0000</pubDate></item><item><title>AList 静默运行脚本</title><link>https://bellisalpina.github.io/post/AList%20-jing-mo-yun-xing-jiao-ben.html</link><description># AList 静默运行脚本&#13;
 &#13;
 使用以下 VBScript 代码可实现 AList 静默运行：&#13;
 &#13;
