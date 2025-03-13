@@ -1,4 +1,4 @@
-# FFmpeg 常用命令参考
+# FFmpeg 常用命令
 
 FFmpeg 是一个强大的音视频处理工具。本文档提供一些常见使用场景的简单命令参考。
 
@@ -141,24 +141,8 @@ ffmpeg -i input.mp4 -vn -c:a copy output.mp3
 ffmpeg -i input.mp4 -vn -c:a aac output.aac
 ```
 
-## 使用硬件加速
-
-使用 NVIDIA GPU 加速（NVENC）：
+## 使用 NVIDIA GPU 加速（NVENC）：
 
 ```bash
-ffmpeg -i input.mp4 -c:v hevc_nvenc -rc vbr -cq 23 -preset p5 -c:a copy output.mp4
+ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p5 -rc vbr_hq -cq 23 -maxrate 6M -bufsize 12M -rc-lookahead 20 -spatial_aq 1 -temporal_aq 1 -c:a copy output.mp4
 ```
-
-使用 Intel Quick Sync：
-
-```bash
-ffmpeg -i input.mp4 -c:v h264_qsv -c:a copy output.mp4
-```
-
-使用 AMD GPU 加速：
-
-```bash
-ffmpeg -i input.mp4 -c:v h264_amf -c:a copy output.mp4
-```
-
-**注意：** 硬件加速需要相应的硬件和驱动支持。

@@ -10,11 +10,11 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="# FFmpeg 常用命令参考
+<meta name="description" content="# FFmpeg 常用命令
 
 FFmpeg 是一个强大的音视频处理工具。">
 <meta property="og:title" content="FFmpeg 常用命令参考">
-<meta property="og:description" content="# FFmpeg 常用命令参考
+<meta property="og:description" content="# FFmpeg 常用命令
 
 FFmpeg 是一个强大的音视频处理工具。">
 <meta property="og:type" content="article">
@@ -87,7 +87,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h1>FFmpeg 常用命令参考</h1>
+<div class="markdown-body" id="postBody"><h1>FFmpeg 常用命令</h1>
 <p>FFmpeg 是一个强大的音视频处理工具。本文档提供一些常见使用场景的简单命令参考。</p>
 <h2>查看媒体文件信息</h2>
 <p>使用 <code class="notranslate">ffprobe</code> 获取流信息：</p>
@@ -186,14 +186,8 @@ ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp4</pre></div>
 </ul>
 <p>如需不同格式：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -vn -c:a aac output.aac</pre></div>
-<h2>使用硬件加速</h2>
-<p>使用 NVIDIA GPU 加速（NVENC）：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v hevc_nvenc -rc vbr -cq 23 -preset p5 -c:a copy output.mp4</pre></div>
-<p>使用 Intel Quick Sync：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v h264_qsv -c:a copy output.mp4</pre></div>
-<p>使用 AMD GPU 加速：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v h264_amf -c:a copy output.mp4</pre></div>
-<p><strong>注意：</strong> 硬件加速需要相应的硬件和驱动支持。</p></div>
+<h2>使用 NVIDIA GPU 加速（NVENC）：</h2>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p5 -rc vbr_hq -cq 23 -maxrate 6M -bufsize 12M -rc-lookahead 20 -spatial_aq 1 -temporal_aq 1 -c:a copy output.mp4</pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>
