@@ -187,7 +187,7 @@ ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp4</pre></div>
 <p>如需不同格式：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -vn -c:a aac output.aac</pre></div>
 <h2>使用 NVIDIA GPU 加速（NVENC）：</h2>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p5 -rc vbr_hq -cq 23 -maxrate 6M -bufsize 12M -rc-lookahead 20 -spatial_aq 1 -temporal_aq 1 -c:a copy output.mp4</pre></div></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p5 -rc vbr -cq 23 -maxrate 6M -bufsize 12M -rc-lookahead 20 -spatial_aq 1 -temporal_aq 1 -c:a copy output.mp4</pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>
