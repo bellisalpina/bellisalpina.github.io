@@ -144,5 +144,5 @@ ffmpeg -i input.mp4 -vn -c:a aac output.aac
 ## 使用 NVIDIA GPU 加速（NVENC）：
 
 ```bash
-ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p5 -rc vbr -cq 23 -maxrate 6M -bufsize 12M -rc-lookahead 20 -spatial_aq 1 -temporal_aq 1 -c:a copy output.mp4
+ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p7 -rc vbr -cq 23 -maxrate 6M -bufsize 12M -rc-lookahead 20 -spatial_aq 1 -temporal_aq 1 -aq-strength 15 -c:a copy output.mp4
 ```
