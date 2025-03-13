@@ -28,13 +28,13 @@ ffprobe -v error -show_format -show_streams -print_format json input.mp4
 1. **输入定位（快速裁剪）**
 
    ```bash
-   ffmpeg -ss 00:00:30 -i input.mp4 -t 10 output.mp4
+   ffmpeg -ss 00:00:30 -i input.mp4 -t 10 -c copy output.mp4
    ```
 
    *从视频大约 30 秒处开始，快速截取 10 秒内容（可能存在几秒的偏差）。*
 
    ```bash
-   ffmpeg -ss 00:01:00 -i input.mp4 -to 00:01:30 output.mp4
+   ffmpeg -ss 00:01:00 -i input.mp4 -to 00:01:30 -c copy output.mp4
    ```
 
    *截取视频从 1 分 00 秒到 1 分 30 秒的片段（可能存在几秒的偏差）。*
@@ -42,16 +42,16 @@ ffprobe -v error -show_format -show_streams -print_format json input.mp4
 2. **输出定位（精确裁剪）**
 
    ```bash
-   ffmpeg -i input.mp4 -ss 00:00:30 -t 10 output.mp4
+   ffmpeg -i input.mp4 -ss 00:00:30 -t 10 -c copy output.mp4
    ```
 
-   *精确截取从 30 秒处开始的 10 秒内容（逐帧处理，速度较慢）。*
+   *精确截取从 30 秒处开始的 10 秒内容。*
 
    ```bash
-   ffmpeg -i input.mp4 -ss 00:01:00 -to 00:01:30 output.mp4
+   ffmpeg -i input.mp4 -ss 00:01:00 -to 00:01:30 -c copy output.mp4
    ```
 
-   *精确截取视频从 1 分 00 秒到 1 分 30 秒的片段（误差小于 0.1 秒）。*
+   *精确截取视频从 1 分 00 秒到 1 分 30 秒的片段。*
 
 ## 视频合并
 
