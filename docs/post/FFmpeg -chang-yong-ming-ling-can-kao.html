@@ -188,7 +188,7 @@ ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp4</pre></div>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -vn -c:a aac output.aac</pre></div>
 <h2>使用硬件加速</h2>
 <p>使用 NVIDIA GPU 加速（NVENC）：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v h264_nvenc -c:a copy output.mp4</pre></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v hevc_nvenc -rc vbr -cq 23 -preset p5 -c:a copy output.mp4</pre></div>
 <p>使用 Intel Quick Sync：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v h264_qsv -c:a copy output.mp4</pre></div>
 <p>使用 AMD GPU 加速：</p>

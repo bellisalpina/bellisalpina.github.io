@@ -146,7 +146,7 @@ ffmpeg -i input.mp4 -vn -c:a aac output.aac
 使用 NVIDIA GPU 加速（NVENC）：
 
 ```bash
-ffmpeg -i input.mp4 -c:v h264_nvenc -c:a copy output.mp4
+ffmpeg -i input.mp4 -c:v hevc_nvenc -rc vbr -cq 23 -preset p5 -c:a copy output.mp4
 ```
 
 使用 Intel Quick Sync：
