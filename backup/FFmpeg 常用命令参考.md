@@ -87,10 +87,8 @@ ffmpeg -i input.mp4 -c:v libx264 -c:a copy output.mp4
 使用 CRF（Constant Rate Factor）方式压缩视频，数值范围 0-51（值越大压缩率越高，画质越低，18-28 是推荐范围）。该模式通过动态分配比特率实现质量优先的压缩：
 
 ```bash
-ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset medium -c:a copy output.mp4
+ffmpeg -i input.mp4 -c:v libx264 -tune film -preset medium -crf 23 -c:a copy output.mp4
 ```
-
-*   `-preset`：编码预设，影响编码速度和质量。`medium` 是一个平衡的选择。
 
 ### CBR（恒定比特率）
 

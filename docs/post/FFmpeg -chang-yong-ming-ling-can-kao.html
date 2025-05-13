@@ -155,10 +155,7 @@ ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp4</pre></div>
 <h2>视频压缩</h2>
 <h3>CRF（恒定质量编码）</h3>
 <p>使用 CRF（Constant Rate Factor）方式压缩视频，数值范围 0-51（值越大压缩率越高，画质越低，18-28 是推荐范围）。该模式通过动态分配比特率实现质量优先的压缩：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset medium -c:a copy output.mp4</pre></div>
-<ul>
-<li><code class="notranslate">-preset</code>：编码预设，影响编码速度和质量。<code class="notranslate">medium</code> 是一个平衡的选择。</li>
-</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -tune film -preset medium -crf 23 -c:a copy output.mp4</pre></div>
 <h3>CBR（恒定比特率）</h3>
 <p>适用于需要固定带宽的场景（如直播推流），通过强制限定比特率保持数据流稳定。需配合 <code class="notranslate">bufsize</code> 参数控制缓冲区大小：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -b:v 4000k -maxrate 4000k -minrate 4000k -bufsize 2000k -c:a copy output.mp4</pre></div>
