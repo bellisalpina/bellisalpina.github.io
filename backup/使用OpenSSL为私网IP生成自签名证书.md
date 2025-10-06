@@ -21,7 +21,7 @@ OU = Department
 CN = Internal
 
 [v3_req]
-keyUsage = keyEncipherment, dataEncipherment
+keyUsage = keyEncipherment, digitalSignature
 extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 
