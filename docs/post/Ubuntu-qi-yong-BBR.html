@@ -32,17 +32,6 @@ echo 'net.ipv4.tcp_congestion_control=bbr' | tee -a /etc/sysctl.conf
 sysctl -p
 ```
 
-### 4. 验证BBR是否启用
-要确认BBR是否成功启用，可以使用以下命令检查当前的拥塞控制算法：
-```bash
-sysctl net.ipv4.tcp_congestion_control
-```
-输出应该显示：
-```
-net.ipv4.tcp_congestion_control = bbr
-```
-这表明BBR已成功启用
-
 ### 5. 检查BBR模块
 虽然BBR是内核自带的，不需要作为独立模块加载，但可以使用以下命令确认BBR模块是否已加载：
 ```
@@ -71,17 +60,6 @@ echo 'net.ipv4.tcp_congestion_control=bbr' | tee -a /etc/sysctl.conf
 sysctl -p
 ```
 
-### 4. 验证BBR是否启用
-要确认BBR是否成功启用，可以使用以下命令检查当前的拥塞控制算法：
-```bash
-sysctl net.ipv4.tcp_congestion_control
-```
-输出应该显示：
-```
-net.ipv4.tcp_congestion_control = bbr
-```
-这表明BBR已成功启用
-
 ### 5. 检查BBR模块
 虽然BBR是内核自带的，不需要作为独立模块加载，但可以使用以下命令确认BBR模块是否已加载：
 ```
@@ -91,7 +69,7 @@ lsmod | grep bbr
 <meta property="og:url" content="https://bellisalpina.github.io/post/Ubuntu-qi-yong-BBR.html">
 <meta property="og:image" content="https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg">
 <title>Ubuntu启用BBR</title>
-<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
 
 
 </head>
@@ -164,8 +142,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </code></pre>
 <h3>2. 修改系统配置</h3>
 <p>修改<code class="notranslate">sysctl.conf</code>以启用BBR，执行以下命令将配置添加到<code class="notranslate">/etc/sysctl.conf</code>文件中：</p>
-<pre class="notranslate"><code class="notranslate">echo "net.core.default_qdisc=fq" | tee -a /etc/sysctl.conf
-echo "net.ipv4.tcp_congestion_control=bbr" | tee -a /etc/sysctl.conf
+<pre class="notranslate"><code class="notranslate">echo 'net.core.default_qdisc=fq' | tee -a /etc/sysctl.conf
+echo 'net.ipv4.tcp_congestion_control=bbr' | tee -a /etc/sysctl.conf
 </code></pre>
 <ul>
 <li>第一条命令设置默认队列规则为<code class="notranslate">fq</code>(Fair Queueing)</li>
@@ -175,13 +153,6 @@ echo "net.ipv4.tcp_congestion_control=bbr" | tee -a /etc/sysctl.conf
 <p>修改完成后，重新加载sysctl配置以使更改生效，运行以下命令：</p>
 <pre class="notranslate"><code class="notranslate">sysctl -p
 </code></pre>
-<h3>4. 验证BBR是否启用</h3>
-<p>要确认BBR是否成功启用，可以使用以下命令检查当前的拥塞控制算法：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sysctl net.ipv4.tcp_congestion_control</pre></div>
-<p>输出应该显示：</p>
-<pre class="notranslate"><code class="notranslate">net.ipv4.tcp_congestion_control = bbr
-</code></pre>
-<p>这表明BBR已成功启用</p>
 <h3>5. 检查BBR模块</h3>
 <p>虽然BBR是内核自带的，不需要作为独立模块加载，但可以使用以下命令确认BBR模块是否已加载：</p>
 <pre class="notranslate"><code class="notranslate">lsmod | grep bbr
