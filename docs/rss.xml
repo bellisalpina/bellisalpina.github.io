@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Thu, 09 Oct 2025 03:29:12 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>使用OpenSSL为私网IP生成自签名证书</title><link>https://bellisalpina.github.io/post/shi-yong-OpenSSL-wei-si-wang-IP-sheng-cheng-zi-qian-ming-zheng-shu.html</link><description># 使用OpenSSL为私网IP生成自签名证书
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Sat, 11 Oct 2025 02:59:50 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>使用OpenSSL为私网IP生成自签名证书</title><link>https://bellisalpina.github.io/post/shi-yong-OpenSSL-wei-si-wang-IP-sheng-cheng-zi-qian-ming-zheng-shu.html</link><description># 使用OpenSSL为私网IP生成自签名证书
 
 以下是使用OpenSSL为192.168.0.1和172.16.0.1生成自签名证书的步骤：
 
@@ -669,17 +669,16 @@ Host github.com&#13;
 ### 安装WireGuard
 ```
 # 安装wireguard
-apt install wireguard-tools -y
+apt install wireguard
 
 # 开启流量转发
 echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
+sysctl -p
 ```
 
 ### 进入配置存储路径，调整目录权限
 ```
-chmod 0777 /etc/wireguard
+chmod 700 /etc/wireguard
 cd /etc/wireguard
 ```
 
@@ -699,12 +698,11 @@ echo '
 [Interface]
 PrivateKey = $(cat server.key)
 Address = 10.0.0.1/24
-ListenPort = 50820
-DNS = 119.29.29.29
+ListenPort = 51820
 
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-#注意eth0需要为本机网卡名称
+#注意eth0需要为本机物理网卡名称
 
 [Peer]
 PublicKey = $(cat client1.key.pub)
@@ -725,7 +723,7 @@ AllowedIPs = 10.0.0.3/32' &gt;&gt; wg0.conf
 
 ### 设置WireGuard服务自启
 ```
-systemctl enable wg-quick@wg0
+systemctl enable wg-quick@wg0.service
 ```
 
 ### 启动WireGuard
@@ -747,7 +745,7 @@ DNS = 119.29.29.29
 [Peer]
 PublicKey = $(cat server.key.pub)
 AllowedIPs = 10.0.0.0/24
-Endpoint = 公网IP:50820
+Endpoint = 公网IP:51820
 PersistentKeepalive = 30' &gt; client1.conf
 ```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/WireGuard-da-jian-xu-ni-ge-ren-wang-luo.html</guid><pubDate>Wed, 09 Oct 2024 02:38:46 +0000</pubDate></item><item><title>如何在GitHub正确地使用curl下载文件？</title><link>https://bellisalpina.github.io/post/ru-he-zai-GitHub-zheng-que-di-shi-yong-curl-xia-zai-wen-jian-%EF%BC%9F.html</link><description># 如何在GitHub正确地使用curl下载文件？  &#13;
 &#13;

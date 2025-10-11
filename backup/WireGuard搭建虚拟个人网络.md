@@ -3,17 +3,16 @@
 ### 安装WireGuard
 ```
 # 安装wireguard
-apt install wireguard-tools -y
+apt install wireguard
 
 # 开启流量转发
 echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
+sysctl -p
 ```
 
 ### 进入配置存储路径，调整目录权限
 ```
-chmod 0777 /etc/wireguard
+chmod 700 /etc/wireguard
 cd /etc/wireguard
 ```
 
@@ -33,12 +32,11 @@ echo "
 [Interface]
 PrivateKey = $(cat server.key)
 Address = 10.0.0.1/24
-ListenPort = 50820
-DNS = 119.29.29.29
+ListenPort = 51820
 
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-#注意eth0需要为本机网卡名称
+#注意eth0需要为本机物理网卡名称
 
 [Peer]
 PublicKey = $(cat client1.key.pub)
@@ -59,7 +57,7 @@ AllowedIPs = 10.0.0.3/32" >> wg0.conf
 
 ### 设置WireGuard服务自启
 ```
-systemctl enable wg-quick@wg0
+systemctl enable wg-quick@wg0.service
 ```
 
 ### 启动WireGuard
@@ -81,6 +79,6 @@ DNS = 119.29.29.29
 [Peer]
 PublicKey = $(cat server.key.pub)
 AllowedIPs = 10.0.0.0/24
-Endpoint = 公网IP:50820
+Endpoint = 公网IP:51820
 PersistentKeepalive = 30" > client1.conf
 ```
