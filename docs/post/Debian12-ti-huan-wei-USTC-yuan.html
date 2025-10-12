@@ -13,35 +13,33 @@
 <meta name="description" content="# Debian12替换为USTC源  
 
 ```
-echo '# 默认注释了源码仓库，如有需要可自行取消注释
-deb http://mirrors.ustc.edu.cn/debian bookworm main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm main contrib non-free non-free-firmware
-deb http://mirrors.ustc.edu.cn/debian bookworm-updates main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm-updates main contrib non-free non-free-firmware
+echo 'deb https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
 
-# backports 软件源，请按需启用
-deb http://mirrors.ustc.edu.cn/debian bookworm-backports main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm-backports main contrib non-free non-free-firmware
+deb https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
 
-deb http://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware' | tee /etc/apt/sources.list
+deb https://mirrors.ustc.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
+
+deb https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware' >/etc/apt/sources.list
 ```。">
 <meta property="og:title" content="Debian12替换为USTC源">
 <meta property="og:description" content="# Debian12替换为USTC源  
 
 ```
-echo '# 默认注释了源码仓库，如有需要可自行取消注释
-deb http://mirrors.ustc.edu.cn/debian bookworm main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm main contrib non-free non-free-firmware
-deb http://mirrors.ustc.edu.cn/debian bookworm-updates main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm-updates main contrib non-free non-free-firmware
+echo 'deb https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
 
-# backports 软件源，请按需启用
-deb http://mirrors.ustc.edu.cn/debian bookworm-backports main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm-backports main contrib non-free non-free-firmware
+deb https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
 
-deb http://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware' | tee /etc/apt/sources.list
+deb https://mirrors.ustc.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
+
+deb https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware' >/etc/apt/sources.list
 ```。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bellisalpina.github.io/post/Debian12-ti-huan-wei-USTC-yuan.html">
@@ -114,18 +112,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>Debian12替换为USTC源</h1>
-<pre class="notranslate"><code class="notranslate">echo "# 默认注释了源码仓库，如有需要可自行取消注释
-deb http://mirrors.ustc.edu.cn/debian bookworm main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm main contrib non-free non-free-firmware
-deb http://mirrors.ustc.edu.cn/debian bookworm-updates main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm-updates main contrib non-free non-free-firmware
+<pre class="notranslate"><code class="notranslate">echo "deb https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
 
-# backports 软件源，请按需启用
-deb http://mirrors.ustc.edu.cn/debian bookworm-backports main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian bookworm-backports main contrib non-free non-free-firmware
+deb https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
 
-deb http://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
-# deb-src http://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware" | tee /etc/apt/sources.list
+deb https://mirrors.ustc.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
+
+deb https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
+# deb-src https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware" &gt;/etc/apt/sources.list
 </code></pre></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
