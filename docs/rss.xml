@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Wed, 15 Oct 2025 04:51:46 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>使用Windows PowerShell放行防火墙端口</title><link>https://bellisalpina.github.io/post/shi-yong-Windows%20PowerShell-fang-xing-fang-huo-qiang-duan-kou.html</link><description># 使用Windows PowerShell放行防火墙端口
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Fri, 17 Oct 2025 05:48:21 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>使用Windows PowerShell放行防火墙端口</title><link>https://bellisalpina.github.io/post/shi-yong-Windows%20PowerShell-fang-xing-fang-huo-qiang-duan-kou.html</link><description># 使用Windows PowerShell放行防火墙端口
 
 ### ⚠️ 重要前提：以管理员身份运行 PowerShell
 所有修改防火墙规则的命令都需要管理员权限。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/shi-yong-Windows%20PowerShell-fang-xing-fang-huo-qiang-duan-kou.html</guid><pubDate>Wed, 15 Oct 2025 04:51:13 +0000</pubDate></item><item><title>解决53端口被systemd-resolved占用</title><link>https://bellisalpina.github.io/post/jie-jue-53-duan-kou-bei-systemd-resolved-zhan-yong.html</link><description># 解决53端口被systemd-resolved占用
@@ -465,46 +465,8 @@ deb https://mirrors.ustc.edu.cn/debian/ bookworm-backports main contrib non-free
 
 deb https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
 # deb-src https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware' &gt;/etc/apt/sources.list
-```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/Debian12-ti-huan-wei-USTC-yuan.html</guid><pubDate>Wed, 09 Oct 2024 12:38:51 +0000</pubDate></item><item><title>SSH通过密钥登录服务器</title><link>https://bellisalpina.github.io/post/SSH-tong-guo-mi-yao-deng-lu-fu-wu-qi.html</link><description># SSH通过密钥登录服务器  &#13;
-&#13;
-要通过SSH密钥登录到服务器，需要生成一对密钥(公钥和私钥)，并将公钥放置在服务器上  &#13;
-&#13;
-### 1. 生成密钥对&#13;
-使用以下命令生成一对SSH密钥：&#13;
-```&#13;
-ssh-keygen -t rsa&#13;
-```&#13;
-- 按照提示，可以选择密钥保存的位置和设置一个密钥锁码，也可以留空以实现无密码登录&#13;
-&#13;
-### 2. 添加公钥到服务器&#13;
-1. 登录到服务器&#13;
-2. 创建 `.ssh` 目录(如果尚不存在)&#13;
-   ```&#13;
-   mkdir -p ~/.ssh&#13;
-   ```&#13;
-3. 将公钥内容添加到 `authorized_keys` 文件中：&#13;
-   ```&#13;
-   cat id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys&#13;
-   ```&#13;
-4. 设置正确的权限：&#13;
-   ```&#13;
-   chmod 600 ~/.ssh/authorized_keys&#13;
-   chmod 700 ~/.ssh&#13;
-   ```&#13;
-&#13;
-### 3. 配置SSH服务&#13;
-确保SSH服务允许使用密钥登录，编辑SSH配置文件 `/etc/ssh/sshd_config`，确保以下选项被设置为 `yes`：&#13;
-```&#13;
-PubkeyAuthentication yes&#13;
-```&#13;
-如果希望禁用密码登录，可以设置：&#13;
-```&#13;
-PasswordAuthentication no&#13;
-```&#13;
-完成后，重启SSH服务：&#13;
-```&#13;
-sudo service sshd restart&#13;
-```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/SSH-tong-guo-mi-yao-deng-lu-fu-wu-qi.html</guid><pubDate>Wed, 09 Oct 2024 05:13:10 +0000</pubDate></item><item><title>Ubuntu启用BBR</title><link>https://bellisalpina.github.io/post/Ubuntu-qi-yong-BBR.html</link><description># Ubuntu启用BBR
+```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/Debian12-ti-huan-wei-USTC-yuan.html</guid><pubDate>Wed, 09 Oct 2024 12:38:51 +0000</pubDate></item><item><title>SSH通过密钥登录服务器</title><link>https://bellisalpina.github.io/post/SSH-tong-guo-mi-yao-deng-lu-fu-wu-qi.html</link><description># SSH 通过密钥登录服务器
+要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/SSH-tong-guo-mi-yao-deng-lu-fu-wu-qi.html</guid><pubDate>Wed, 09 Oct 2024 05:13:10 +0000</pubDate></item><item><title>Ubuntu启用BBR</title><link>https://bellisalpina.github.io/post/Ubuntu-qi-yong-BBR.html</link><description># Ubuntu启用BBR
 
 ### 1. 检查内核版本
 确保系统内核版本为4.9或更高，通过以下命令检查内核版本：

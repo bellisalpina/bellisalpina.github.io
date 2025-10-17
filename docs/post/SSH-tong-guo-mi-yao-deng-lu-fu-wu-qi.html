@@ -10,92 +10,16 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="# SSH通过密钥登录服务器  
-
-要通过SSH密钥登录到服务器，需要生成一对密钥(公钥和私钥)，并将公钥放置在服务器上  
-
-### 1. 生成密钥对
-使用以下命令生成一对SSH密钥：
-```
-ssh-keygen -t rsa
-```
-- 按照提示，可以选择密钥保存的位置和设置一个密钥锁码，也可以留空以实现无密码登录
-
-### 2. 添加公钥到服务器
-1. 登录到服务器
-2. 创建 `.ssh` 目录(如果尚不存在)
-   ```
-   mkdir -p ~/.ssh
-   ```
-3. 将公钥内容添加到 `authorized_keys` 文件中：
-   ```
-   cat id_rsa.pub >> ~/.ssh/authorized_keys
-   ```
-4. 设置正确的权限：
-   ```
-   chmod 600 ~/.ssh/authorized_keys
-   chmod 700 ~/.ssh
-   ```
-
-### 3. 配置SSH服务
-确保SSH服务允许使用密钥登录，编辑SSH配置文件 `/etc/ssh/sshd_config`，确保以下选项被设置为 `yes`：
-```
-PubkeyAuthentication yes
-```
-如果希望禁用密码登录，可以设置：
-```
-PasswordAuthentication no
-```
-完成后，重启SSH服务：
-```
-sudo service sshd restart
-```。">
+<meta name="description" content="# SSH 通过密钥登录服务器
+要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。">
 <meta property="og:title" content="SSH通过密钥登录服务器">
-<meta property="og:description" content="# SSH通过密钥登录服务器  
-
-要通过SSH密钥登录到服务器，需要生成一对密钥(公钥和私钥)，并将公钥放置在服务器上  
-
-### 1. 生成密钥对
-使用以下命令生成一对SSH密钥：
-```
-ssh-keygen -t rsa
-```
-- 按照提示，可以选择密钥保存的位置和设置一个密钥锁码，也可以留空以实现无密码登录
-
-### 2. 添加公钥到服务器
-1. 登录到服务器
-2. 创建 `.ssh` 目录(如果尚不存在)
-   ```
-   mkdir -p ~/.ssh
-   ```
-3. 将公钥内容添加到 `authorized_keys` 文件中：
-   ```
-   cat id_rsa.pub >> ~/.ssh/authorized_keys
-   ```
-4. 设置正确的权限：
-   ```
-   chmod 600 ~/.ssh/authorized_keys
-   chmod 700 ~/.ssh
-   ```
-
-### 3. 配置SSH服务
-确保SSH服务允许使用密钥登录，编辑SSH配置文件 `/etc/ssh/sshd_config`，确保以下选项被设置为 `yes`：
-```
-PubkeyAuthentication yes
-```
-如果希望禁用密码登录，可以设置：
-```
-PasswordAuthentication no
-```
-完成后，重启SSH服务：
-```
-sudo service sshd restart
-```。">
+<meta property="og:description" content="# SSH 通过密钥登录服务器
+要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bellisalpina.github.io/post/SSH-tong-guo-mi-yao-deng-lu-fu-wu-qi.html">
 <meta property="og:image" content="https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg">
 <title>SSH通过密钥登录服务器</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -161,42 +85,75 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h1>SSH通过密钥登录服务器</h1>
-<p>要通过SSH密钥登录到服务器，需要生成一对密钥(公钥和私钥)，并将公钥放置在服务器上</p>
-<h3>1. 生成密钥对</h3>
-<p>使用以下命令生成一对SSH密钥：</p>
-<pre class="notranslate"><code class="notranslate">ssh-keygen -t rsa
-</code></pre>
+<div class="markdown-body" id="postBody"><h1>SSH 通过密钥登录服务器</h1>
+<h2>要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。</h2>
+<h2>1. 生成密钥对</h2>
+<p>使用以下命令生成一对 SSH 密钥。推荐使用 <code class="notranslate">ed25519</code> 算法，它更安全且性能更好。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ssh-keygen -t ed25519 -C <span class="pl-s"><span class="pl-pds">"</span>你的邮箱或注释<span class="pl-pds">"</span></span> -f <span class="pl-k">~</span>/.ssh/id_ed25519</pre></div>
+<p><strong>命令参数说明：</strong></p>
 <ul>
-<li>按照提示，可以选择密钥保存的位置和设置一个密钥锁码，也可以留空以实现无密码登录</li>
+<li><code class="notranslate">-t ed25519</code>：指定密钥类型为 <code class="notranslate">ed25519</code>。</li>
+<li><code class="notranslate">-C "注释"</code>：为密钥添加一个识别标签，通常是你的邮箱。</li>
+<li><code class="notranslate">-f ~/.ssh/id_ed25519</code>：指定密钥文件的存放位置和名称。<code class="notranslate">~/.ssh/</code> 是默认且推荐的目录。<br>
+执行命令后，会提示你设置一个<strong>密码短语</strong>。</li>
 </ul>
-<h3>2. 添加公钥到服务器</h3>
+<blockquote>
+<p><strong>提示</strong>：</p>
+<ul>
+<li>设置密码短语可以为私钥增加一层额外的安全保护。即使私钥文件泄露，攻击者仍需此密码才能使用。</li>
+<li>也可以直接按回车留空，这样登录时无需输入密码，更便捷，但安全性会降低。</li>
+</ul>
+</blockquote>
+<h2>2. 添加公钥到服务器</h2>
+<h3>方法一：使用 <code class="notranslate">ssh-copy-id</code>（推荐）</h3>
+<p>这是最简单、最安全的方法，它会自动处理文件权限。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ssh-copy-id -i <span class="pl-k">~</span>/.ssh/id_ed25519.pub user@example.com</pre></div>
+<p><strong>命令参数说明：</strong></p>
+<ul>
+<li><code class="notranslate">-i ~/.ssh/id_ed25519.pub</code>：指定要上传的公钥文件。</li>
+<li><code class="notranslate">user@example.com</code>：替换为你的服务器用户名和地址。</li>
+</ul>
+<h3>方法二：手动部署</h3>
+<p>在某些环境下（例如部分 Windows 系统），可能没有 <code class="notranslate">ssh-copy-id</code> 命令。此时，您可以手动进行部署：</p>
 <ol>
-<li>登录到服务器</li>
-<li>创建 <code class="notranslate">.ssh</code> 目录(如果尚不存在)
-<pre class="notranslate"><code class="notranslate">mkdir -p ~/.ssh
-</code></pre>
+<li><strong>登录服务器</strong>：
+<div class="highlight highlight-source-shell"><pre class="notranslate">ssh user@example.com</pre></div>
 </li>
-<li>将公钥内容添加到 <code class="notranslate">authorized_keys</code> 文件中：
-<pre class="notranslate"><code class="notranslate">cat id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
-</code></pre>
+<li><strong>创建 <code class="notranslate">.ssh</code> 目录</strong>（如果尚不存在）：
+<div class="highlight highlight-source-shell"><pre class="notranslate">mkdir -p <span class="pl-k">~</span>/.ssh</pre></div>
 </li>
-<li>设置正确的权限：
-<pre class="notranslate"><code class="notranslate">chmod 600 ~/.ssh/authorized_keys
-chmod 700 ~/.ssh
-</code></pre>
+<li><strong>将公钥内容追加到 <code class="notranslate">authorized_keys</code> 文件</strong>：<br>
+首先，在<strong>本地机器</strong>上查看并复制公钥内容：
+<div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-k">~</span>/.ssh/id_ed25519.pub</pre></div>
+然后，在<strong>服务器</strong>上，将复制的内容追加到 <code class="notranslate">authorized_keys</code> 文件中：
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>粘贴你刚刚复制的公钥内容<span class="pl-pds">"</span></span> <span class="pl-k">&gt;&gt;</span> <span class="pl-k">~</span>/.ssh/authorized_keys</pre></div>
+</li>
+<li><strong>设置正确的文件权限</strong>（非常重要！）：
+<div class="highlight highlight-source-shell"><pre class="notranslate">chmod 600 <span class="pl-k">~</span>/.ssh/authorized_keys
+chmod 700 <span class="pl-k">~</span>/.ssh</pre></div>
+<ul>
+<li><code class="notranslate">600</code> 权限确保只有文件所有者可以读写 <code class="notranslate">authorized_keys</code>。</li>
+<li><code class="notranslate">700</code> 权限确保只有文件所有者可以访问、读取、写入和执行 <code class="notranslate">.ssh</code> 目录。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：如果权限设置不正确，SSH 服务会出于安全考虑而忽略你的密钥。</p>
+</blockquote>
 </li>
 </ol>
-<h3>3. 配置SSH服务</h3>
-<p>确保SSH服务允许使用密钥登录，编辑SSH配置文件 <code class="notranslate">/etc/ssh/sshd_config</code>，确保以下选项被设置为 <code class="notranslate">yes</code>：</p>
-<pre class="notranslate"><code class="notranslate">PubkeyAuthentication yes
+<h2>3. 配置 SSH 服务</h2>
+<p>确保服务器端的 SSH 服务允许密钥登录。编辑 SSH 配置文件：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">nano -w /etc/ssh/sshd_config</pre></div>
+<p>找到并确保以下选项设置为 <code class="notranslate">yes</code>（通常默认就是）：</p>
+<pre lang="config" class="notranslate"><code class="notranslate">PubkeyAuthentication yes
 </code></pre>
-<p>如果希望禁用密码登录，可以设置：</p>
-<pre class="notranslate"><code class="notranslate">PasswordAuthentication no
+<p>（可选）为了提高安全性，在确认密钥登录正常工作后，可以禁用密码登录：</p>
+<pre lang="config" class="notranslate"><code class="notranslate">PasswordAuthentication no
 </code></pre>
-<p>完成后，重启SSH服务：</p>
-<pre class="notranslate"><code class="notranslate">sudo service sshd restart
-</code></pre></div>
+<blockquote>
+<p><strong>警告</strong>：在禁用密码登录前，请务必确保你的密钥登录已经成功配置并且可以正常使用！否则你可能会被锁定在服务器之外。<br>
+完成修改后，保存文件并重启 SSH 服务以使配置生效：</p>
+</blockquote>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo systemctl restart sshd</pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>
