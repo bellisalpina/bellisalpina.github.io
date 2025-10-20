@@ -50,7 +50,7 @@ ssh://git@github.com/example/example.git
 
 ### 1. 配置代理
 1.  找到并编辑 SSH 配置文件。文件路径通常为：
-    `C:\Users\**你的用户名**\.ssh\config`
+    `C:\Users\你的用户名\.ssh\config`
     （如果文件或目录不存在，请手动创建。）
 2.  在文件末尾添加以下内容：
     ```bash
