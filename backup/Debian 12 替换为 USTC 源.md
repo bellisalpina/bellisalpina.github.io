@@ -17,7 +17,7 @@ cp /etc/apt/sources.list /etc/apt/sources.list.bak
 以下命令会直接覆盖 `/etc/apt/sources.list` 文件。
 
 ```bash
-cat << EOF > /etc/apt/sources.list
+cat << 'EOF' > /etc/apt/sources.list
 deb https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
 # deb-src https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
 deb https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware

@@ -95,7 +95,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <div class="highlight highlight-source-shell"><pre class="notranslate">cp /etc/apt/sources.list /etc/apt/sources.list.bak</pre></div>
 <h3>2. 写入新的源列表</h3>
 <p>以下命令会直接覆盖 <code class="notranslate">/etc/apt/sources.list</code> 文件。</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-s"><span class="pl-k">&lt;&lt;</span> <span class="pl-k">EOF</span> &gt; /etc/apt/sources.list</span>
+<div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-s"><span class="pl-k">&lt;&lt;</span> '<span class="pl-k">EOF</span>' &gt; /etc/apt/sources.list</span>
 <span class="pl-s">deb https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span>
 <span class="pl-s"># deb-src https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span>
 <span class="pl-s">deb https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span>
