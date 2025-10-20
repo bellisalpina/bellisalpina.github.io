@@ -11,36 +11,10 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="# AList 静默运行脚本
-
-使用以下 VBScript 代码可实现 AList 静默运行：
-
-```vbscript
-Dim ws
-Set ws = WScript.CreateObject('WScript.Shell')
-ws.run 'alist.exe server', vbHide
-Set ws = Nothing
-WScript.Quit
-```
-
-### 使用方法
-
-1. 将代码复制到文本文件中。">
+本文档介绍了两种实现 AList 程序在 Windows 系统下静默运行（即不显示控制台窗口）的方法。">
 <meta property="og:title" content="AList 静默运行脚本">
 <meta property="og:description" content="# AList 静默运行脚本
-
-使用以下 VBScript 代码可实现 AList 静默运行：
-
-```vbscript
-Dim ws
-Set ws = WScript.CreateObject('WScript.Shell')
-ws.run 'alist.exe server', vbHide
-Set ws = Nothing
-WScript.Quit
-```
-
-### 使用方法
-
-1. 将代码复制到文本文件中。">
+本文档介绍了两种实现 AList 程序在 Windows 系统下静默运行（即不显示控制台窗口）的方法。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bellisalpina.github.io/post/AList%20-jing-mo-yun-xing-jiao-ben.html">
 <meta property="og:image" content="https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg">
@@ -112,18 +86,61 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>AList 静默运行脚本</h1>
-<p>使用以下 VBScript 代码可实现 AList 静默运行：</p>
-<div class="highlight highlight-source-vbnet"><pre class="notranslate"><span class="pl-k">Dim</span> <span class="pl-smi">ws</span>
-<span class="pl-k">Set</span> <span class="pl-smi">ws</span> <span class="pl-smi">=</span> <span class="pl-smi">WScript.CreateObject(</span><span class="pl-s">"WScript.Shell"</span><span class="pl-smi">)</span>
-<span class="pl-smi">ws.run</span> <span class="pl-s">"alist.exe server"</span><span class="pl-smi">,</span> <span class="pl-smi">vbHide</span>
-<span class="pl-k">Set</span> <span class="pl-smi">ws</span> <span class="pl-smi">=</span> <span class="pl-k">Nothing</span>
-<span class="pl-smi">WScript.Quit</span></pre></div>
-<h3>使用方法</h3>
+<h2>本文档介绍了两种实现 AList 程序在 Windows 系统下静默运行（即不显示控制台窗口）的方法。</h2>
+<h2>方法一：使用 VBScript 脚本</h2>
+<p>这是一种经典且简单的方法，通过 VBScript 的 <code class="notranslate">WScript.Shell</code> 对象来隐藏程序窗口。<br>
+<strong>操作步骤：</strong></p>
 <ol>
-<li>将代码复制到文本文件中。</li>
-<li>保存为 <code class="notranslate">run_alist.vbs</code>。</li>
-<li>双击运行，AList 将在后台运行。</li>
-</ol></div>
+<li>创建一个新文件，将其命名为 <code class="notranslate">run_hidden.vbs</code>（或任何你喜欢的 <code class="notranslate">.vbs</code> 名称）。</li>
+<li>将以下代码粘贴到文件中并保存。</li>
+</ol>
+<div class="highlight highlight-source-vbnet"><pre class="notranslate"><span class="pl-c">' 创建一个 WScript.Shell 对象</span>
+<span class="pl-k">Dim</span> <span class="pl-smi">ws</span>
+<span class="pl-k">Set</span> <span class="pl-smi">ws</span> <span class="pl-smi">=</span> <span class="pl-smi">WScript.CreateObject(</span><span class="pl-s">"WScript.Shell"</span><span class="pl-smi">)</span>
+<span class="pl-c">' 以隐藏窗口方式运行 alist.exe</span>
+<span class="pl-c">' 假设 alist.exe 与此脚本在同一目录下</span>
+<span class="pl-smi">ws.run</span> <span class="pl-s">"alist.exe server"</span><span class="pl-smi">,</span> <span class="pl-smi">vbHide</span>
+<span class="pl-c">' 释放对象</span>
+<span class="pl-k">Set</span> <span class="pl-smi">ws</span> <span class="pl-smi">=</span> <span class="pl-k">Nothing</span>
+<span class="pl-c">' 退出脚本</span>
+<span class="pl-smi">WScript.Quit</span></pre></div>
+<h2><strong>使用说明：</strong><br>
+将 <code class="notranslate">run_hidden.vbs</code> 文件与 <code class="notranslate">alist.exe</code> 放在同一目录下，双击该 <code class="notranslate">.vbs</code> 文件即可在后台启动 AList。</h2>
+<h2>方法二：使用批处理脚本 (嵌套调用)</h2>
+<p>这种方法通过一个批处理文件调用另一个，并利用 PowerShell 来隐藏窗口，灵活性更高（例如，可以方便地以管理员身份运行）。</p>
+<h3>步骤一：创建主启动脚本</h3>
+<p>首先，创建一个名为 <code class="notranslate">start.bat</code> 的文件，用于执行启动 AList 的核心命令。</p>
+<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">@</span><span class="pl-k">echo</span> <span class="pl-k">off</span>
+<span class="pl-k">cd</span> /d <span class="pl-s"><span class="pl-pds">"</span><span class="pl-v">%~dp0</span><span class="pl-pds">"</span></span>
+.\alist.exe server</pre></div>
+<p><strong>代码说明：</strong></p>
+<ul>
+<li><code class="notranslate">@echo off</code>: 关闭命令回显，使窗口更干净。</li>
+<li><code class="notranslate">cd /d "%~dp0"</code>: 切换到批处理文件所在的目录，确保能正确找到 <code class="notranslate">alist.exe</code>。</li>
+</ul>
+<h3>步骤二：创建静默启动脚本</h3>
+<p>接着，创建第二个名为 <code class="notranslate">start_no_window.bat</code> 的文件，它将调用 <code class="notranslate">start.bat</code> 并隐藏其窗口。</p>
+<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">@</span><span class="pl-k">echo</span> <span class="pl-k">off</span>
+<span class="pl-k">cd</span> /d <span class="pl-s"><span class="pl-pds">"</span><span class="pl-v">%~dp0</span><span class="pl-pds">"</span></span>
+powershell.exe -ExecutionPolicy Bypass -Command <span class="pl-s"><span class="pl-pds">"</span>Start-Process '.\start.bat' -WindowStyle Hidden<span class="pl-pds">"</span></span></pre></div>
+<p><strong>代码说明：</strong></p>
+<ul>
+<li><code class="notranslate">powershell.exe ...</code>: 调用 PowerShell。</li>
+<li><code class="notranslate">-ExecutionPolicy Bypass</code>: 临时绕过执行策略，允许运行脚本。</li>
+<li><code class="notranslate">Start-Process</code>: 启动一个新进程。</li>
+<li><code class="notranslate">'.\start.bat'</code>: 要启动的进程是 <code class="notranslate">start.bat</code>。</li>
+<li><code class="notranslate">-WindowStyle Hidden</code>: 关键参数，用于隐藏新进程的窗口。<br>
+<strong>使用说明：</strong><br>
+将这两个 <code class="notranslate">.bat</code> 文件与 <code class="notranslate">alist.exe</code> 放在同一目录下，双击 <code class="notranslate">start_no_window.bat</code> 即可实现静默启动。</li>
+</ul>
+<hr>
+<h3>(可选) 以管理员身份运行</h3>
+<p>如果 AList 需要管理员权限来访问某些目录，只需在 <code class="notranslate">start_no_window.bat</code> 的 PowerShell 命令中添加 <code class="notranslate">-Verb RunAs</code> 参数即可。<br>
+修改后的 <code class="notranslate">start_no_window.bat</code> 内容如下：</p>
+<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">@</span><span class="pl-k">echo</span> <span class="pl-k">off</span>
+<span class="pl-k">cd</span> /d <span class="pl-s"><span class="pl-pds">"</span><span class="pl-v">%~dp0</span><span class="pl-pds">"</span></span>
+powershell.exe -ExecutionPolicy Bypass -Command <span class="pl-s"><span class="pl-pds">"</span>Start-Process '.\start.bat' -WindowStyle Hidden -Verb RunAs<span class="pl-pds">"</span></span></pre></div>
+<p><strong>注意：</strong> 使用此参数运行时，系统会弹出 UAC（用户账户控制）窗口请求授权，点击“是”后，AList 将以管理员权限在后台运行。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>
