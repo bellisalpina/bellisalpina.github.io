@@ -7,8 +7,10 @@
 这是一种经典且简单的方法，通过 VBScript 的 `WScript.Shell` 对象来隐藏程序窗口。
 
 **操作步骤：**
+
 1.  创建一个新文件，将其命名为 `run_hidden.vbs`（或任何你喜欢的 `.vbs` 名称）。
 2.  将以下代码粘贴到文件中并保存。
+
 ```vbscript
 Dim ws
 Set ws = WScript.CreateObject("WScript.Shell")
@@ -16,6 +18,7 @@ ws.run "alist.exe server", vbHide
 Set ws = Nothing
 WScript.Quit
 ```
+
 **使用说明：**
 
 将 `run_hidden.vbs` 文件与 `alist.exe` 放在同一目录下，双击该 `.vbs` 文件即可在后台启动 AList。
@@ -27,18 +30,22 @@ WScript.Quit
 ### 步骤一：创建主启动脚本
 
 首先，创建一个名为 `start.bat` 的文件，用于执行启动 AList 的核心命令。
+
 ```batch
 @echo off
 cd /d "%~dp0"
 .\alist.exe server
 ```
+
 **代码说明：**
+
 *   `@echo off`: 关闭命令回显，使窗口更干净。
 *   `cd /d "%~dp0"`: 切换到批处理文件所在的目录，确保能正确找到 `alist.exe`。
 
 ### 步骤二：创建静默启动脚本
 
 接着，创建第二个名为 `start_no_window.bat` 的文件，它将调用 `start.bat` 并隐藏其窗口。
+
 ```batch
 @echo off
 cd /d "%~dp0"
@@ -46,6 +53,7 @@ powershell.exe -ExecutionPolicy Bypass -Command "Start-Process '.\start.bat' -Wi
 ```
 
 **代码说明：**
+
 *   `powershell.exe ...`: 调用 PowerShell。
 *   `-ExecutionPolicy Bypass`: 临时绕过执行策略，允许运行脚本。
 *   `Start-Process`: 启动一个新进程。
@@ -61,6 +69,7 @@ powershell.exe -ExecutionPolicy Bypass -Command "Start-Process '.\start.bat' -Wi
 如果 AList 需要管理员权限来访问某些目录，只需在 `start_no_window.bat` 的 PowerShell 命令中添加 `-Verb RunAs` 参数即可。
 
 修改后的 `start_no_window.bat` 内容如下：
+
 ```batch
 @echo off
 cd /d "%~dp0"
