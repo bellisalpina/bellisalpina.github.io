@@ -11,9 +11,11 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="# SSH 通过密钥登录服务器
+
 要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。">
 <meta property="og:title" content="SSH通过密钥登录服务器">
 <meta property="og:description" content="# SSH 通过密钥登录服务器
+
 要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bellisalpina.github.io/post/SSH-tong-guo-mi-yao-deng-lu-fu-wu-qi.html">
@@ -86,7 +88,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>SSH 通过密钥登录服务器</h1>
-<h2>要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。</h2>
+<p>要通过 SSH 密钥登录服务器，您需要先生成一对密钥（公钥和私钥），然后将公钥部署到服务器上。</p>
 <h2>1. 生成密钥对</h2>
 <p>使用以下命令生成一对 SSH 密钥。推荐使用 <code class="notranslate">ed25519</code> 算法，它更安全且性能更好。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ssh-keygen -t ed25519 -C <span class="pl-s"><span class="pl-pds">"</span>你的邮箱或注释<span class="pl-pds">"</span></span> -f <span class="pl-k">~</span>/.ssh/id_ed25519</pre></div>
