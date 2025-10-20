@@ -91,7 +91,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>当你需要自行安装 DNS 服务时，会发现 <code class="notranslate">systemd-resolved</code> 服务默认占用了 53 端口。以下是解决此问题的标准步骤。</p>
 <h2>1. 临时停止 systemd-resolved 服务</h2>
 <p>为了立即释放 53 端口，首先需要停止该服务。</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo systemctl stop systemd-resolved</pre></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate">systemctl stop systemd-resolved</pre></div>
 <h2>2. 修改配置文件</h2>
 <p>编辑 <code class="notranslate">systemd-resolved</code> 的主配置文件。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">nano -w /etc/systemd/resolved.conf</pre></div>
@@ -104,7 +104,6 @@ DNSStubListener=no  # 关键步骤：取消注释，并将 yes 改为 no
 ...
 </code></pre>
 <blockquote>
-<p><strong>说明</strong>：</p>
 <ul>
 <li><code class="notranslate">DNS=</code>：设置系统的上游 DNS 服务器。</li>
 <li><code class="notranslate">DNSStubListener=no</code>：禁用监听在 <code class="notranslate">127.0.0.53:53</code> 的 DNS 存根，这是释放端口的核心。</li>
