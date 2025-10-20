@@ -1,33 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Mon, 20 Oct 2025 05:24:56 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>在 Debian 12 上配置 TeamSpeak 3 服务器为 systemd 服务</title><link>https://bellisalpina.github.io/post/zai-%20Debian%2012%20-shang-pei-zhi-%20TeamSpeak%203%20-fu-wu-qi-wei-%20systemd%20-fu-wu.html</link><description># 在 Debian 12 上配置 TeamSpeak 3 服务器为 systemd 服务
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Mon, 20 Oct 2025 07:48:52 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>在 Debian 12 上配置 TeamSpeak 3 服务器为 systemd 服务</title><link>https://bellisalpina.github.io/post/zai-%20Debian%2012%20-shang-pei-zhi-%20TeamSpeak%203%20-fu-wu-qi-wei-%20systemd%20-fu-wu.html</link><description># 在 Debian 12 上配置 TeamSpeak 3 服务器为 systemd 服务
 
 本文将介绍如何在 Debian 12 系统中为 TeamSpeak 3 服务器创建专用用户，并配置为 systemd 服务以实现开机自启，提升安全性和可管理性。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/zai-%20Debian%2012%20-shang-pei-zhi-%20TeamSpeak%203%20-fu-wu-qi-wei-%20systemd%20-fu-wu.html</guid><pubDate>Sat, 18 Oct 2025 16:29:38 +0000</pubDate></item><item><title>使用Windows PowerShell放行防火墙端口</title><link>https://bellisalpina.github.io/post/shi-yong-Windows%20PowerShell-fang-xing-fang-huo-qiang-duan-kou.html</link><description># 使用Windows PowerShell放行防火墙端口
 
 ### ⚠️ 重要前提：以管理员身份运行 PowerShell
-所有修改防火墙规则的命令都需要管理员权限。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/shi-yong-Windows%20PowerShell-fang-xing-fang-huo-qiang-duan-kou.html</guid><pubDate>Wed, 15 Oct 2025 04:51:13 +0000</pubDate></item><item><title>解决53端口被systemd-resolved占用</title><link>https://bellisalpina.github.io/post/jie-jue-53-duan-kou-bei-systemd-resolved-zhan-yong.html</link><description># 解决53端口被systemd-resolved占用
+所有修改防火墙规则的命令都需要管理员权限。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/shi-yong-Windows%20PowerShell-fang-xing-fang-huo-qiang-duan-kou.html</guid><pubDate>Wed, 15 Oct 2025 04:51:13 +0000</pubDate></item><item><title>解决 53 端口被 systemd-resolved 占用的问题</title><link>https://bellisalpina.github.io/post/jie-jue-%2053%20-duan-kou-bei-%20systemd-resolved%20-zhan-yong-de-wen-ti.html</link><description># 解决 53 端口被 systemd-resolved 占用的问题
 
-### 1. 先临时停用systemd-resolved服务
-```bash
-systemctl stop systemd-resolved
-```
-
-### 2. 编辑`/etc/systemd/resolved.conf`
-```bash
-nano -w /etc/systemd/resolved.conf
-```
-
-### 3. 修改并保存
-```conf
-[Resolve]
-DNS=119.29.29.29  #取消注释
-...
-DNSStubListener=no  #取消注释，把yes改为no
-```
-
-### 4. 链接
-```bash
-ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
-```。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/jie-jue-53-duan-kou-bei-systemd-resolved-zhan-yong.html</guid><pubDate>Sat, 11 Oct 2025 03:26:42 +0000</pubDate></item><item><title>使用OpenSSL为私网IP生成自签名证书</title><link>https://bellisalpina.github.io/post/shi-yong-OpenSSL-wei-si-wang-IP-sheng-cheng-zi-qian-ming-zheng-shu.html</link><description># 使用OpenSSL为私网IP生成自签名证书
+当你需要自行安装 DNS 服务时，会发现 `systemd-resolved` 服务默认占用了 53 端口。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/jie-jue-%2053%20-duan-kou-bei-%20systemd-resolved%20-zhan-yong-de-wen-ti.html</guid><pubDate>Sat, 11 Oct 2025 03:26:42 +0000</pubDate></item><item><title>使用OpenSSL为私网IP生成自签名证书</title><link>https://bellisalpina.github.io/post/shi-yong-OpenSSL-wei-si-wang-IP-sheng-cheng-zi-qian-ming-zheng-shu.html</link><description># 使用OpenSSL为私网IP生成自签名证书
 
 以下是使用OpenSSL为192.168.0.1和172.16.0.1生成自签名证书的步骤：
 
