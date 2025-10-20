@@ -12,372 +12,16 @@
     </script>
 <meta name="description" content="# Arch Linux 基础安装
 
-本文基于，已通过包括但不限于U盘刻录ISO镜像等方式，启动进入到 Live 环境下
-
-安装将全部以 UEFI+GPT 的形式进行，传统 BIOS 方式不再赘述
-
-安装 Arch Linux 的过程中需要**稳定的网络连接**
-
-如果只能使用无线网络，需要事先把 Wi-Fi 名称改成英文，因为安装时无法显示和输入中文
-
-## 1. 禁用 reflector 服务
-
-2020 年，Arch Linux安装镜像中加入了`reflector`服务，`reflector`会自动选择速度合适的镜像源，但结果并不准确，特定情况下，它会误删某些有用的源信息
-
-通过以下命令将该服务禁用：
-```
-systemctl stop reflector.service
-```
-## 2. 验证是否为 UEFI 引导模式
-
-执行命令：
-```
-ls /sys/firmware/efi/efivars
-```
-如果输出了一堆东西(EFI变量)，则说明已在 UEFI 模式
-
-## 3. 连接网络
-
-大部分情况下，DHCP能很好地自动配置IP和DNS，如果需要配置静态IP和DNS，自行参考Arch Wiki
-
-对于有线连接，插入网线即可
-
-对于无线连接，则需进行如下操作
-
-无线连接使用`iwctl`命令进行，按照如下步骤进行网络连接：
-```
-iwctl                           #执行iwctl命令，进入交互式命令行
-device list                     #列出设备名，比如无线网卡叫wlan0
-station wlan0 scan              #扫描网络
-station wlan0 get-networks      #列出网络 比如想连接xxxxx这个无线网络
-station wlan0 connect xxxxx     #连接 输入密码
-exit                            #成功后exit退出
-```
-连接成功后通过`ping`测试网络连接：
-```
-ping www.baidu.com
-```
-
-## 4. 更新系统时间
-
-在 Live 环境中`systemd-timesyncd`默认启用，也就是说当系统已经创建互联网连接后，系统时间将自动同步
-
-使用`timedatectl`确保系统时间是同步的：
-```
-timedatectl
-```
-如果时间不同步，使用以下命令：
-```
-timedatectl set-ntp true    #将系统时间与网络时间进行同步
-timedatectl status          #检查服务状态
-```
-
-## 5. 磁盘分区
-
-使用`fdisk`查看并确定要操作的磁盘：
-```
-fdisk -l
-```
-本文使用以下分区方案：
-+ EFI 分区： `/efi`  
-+ 根分区： `/`  
-+ 用户主目录： `/home`  
-
-首先将磁盘转换为 GPT 格式，假设磁盘名称为`sdx`，NVME 的固态硬盘磁盘名称可能为`nvme0n1`
-```
-parted /dev/sdx     #执行parted，进入交互式命令行
-mklabel gpt         #将磁盘类型转换为GPT 如磁盘有数据会警告 输入yes即可
-quit                #quit退出parted命令行交互
-```
-**接下来使用分区工具 (fdisk、parted、cfdisk等等) 对磁盘进行分区，不同工具操作方式不同，此处不过多赘述**
-
-建议将 EFI 分区设置为磁盘的第一个分区，避免可能出现的兼容性问题
-
-分区结束后，用`fdisk`复查磁盘的情况：
-
-```
-fdisk -l
-```
-
-## 6. 格式化分区
-
-创建分区后，必须使用合适的文件系统对每个新创建的分区进行格式化
-
-以下命令中的`sdax`中，`x`代表分区的序号，与上一步创建分区时的序号对应
-
-使用`mkfs.ext4`格式化根分区和用户主目录：
-```
-mkfs.ext4 /dev/sdax
-```
-使用`mkfs.fat`格式化 EFI 分区：
-```
-mkfs.fat -F 32 /dev/sdax
-```
-
-## 7. 挂载分区
-
-挂载是有顺序的，必须先挂载根分区，再挂载其他分区，此处`sdax`仅为举例，请根据实际情况挂载
-
-将根分区挂载到 `/mnt`
-```
-mount /dev/sdax /mnt
-```
-挂载 EFI 分区
-```
-mount --mkdir /dev/sdax /mnt/efi
-```
-挂载用户主目录
-```
-mount --mkdir /dev/sdax /mnt/home
-```
-
-## 8. 选择镜像站
-
-`/etc/pacman.d/mirrorlist`定义了软件包会从哪个镜像站下载
-
-使用 `curl`从 archlinux 官方网站的镜像站列表下载位于中国大陆的 HTTPS 镜像站
-```
-curl -L 'https://archlinux.org/mirrorlist/?country=CN&protocol=https' -o /etc/pacman.d/mirrorlist
-```
-手动编辑`/etc/pacman.d/mirrorlist`，取消注释以启用镜像站
-
-## 9. 安装系统
-
-使用`pacstrap`安装必须的软件包：
-```
-pacstrap -K /mnt base base-devel linux-zen linux-zen-headers linux-firmware
-```
-功能性软件：
-```
-pacstrap -K /mnt sudo networkmanager nano vim
-```
-
-## 10. 生成 fstab 文件
-
-`fstab`用来定义磁盘分区
-```
-genfstab -U /mnt >> /mnt/etc/fstab
-```
-**强烈建议**在执行完以上命令后，检查一下生成的`/mnt/etc/fstab`文件是否正确
-
-## 11. chroot 到新安装的系统
-
-通过以下命令 chroot 到新安装的系统：
-```
-arch-chroot /mnt
-```
-
-## 12. 设置时区
-
-通过以下命令设置时区：
-```
-ln -sf /usr/share/zoneinfo/Region(地区名)/City(城市名) /etc/localtime
-```
-将当前的系统时间同步到硬件时钟：
-```
-hwclock --systohc
-```
-
-## 13. 区域和本地化设置
-
-编辑`/etc/locale.gen`，然后取消掉`en_US.UTF-8`和`zh_CN.UTF-8`的注释
-
-接着执行`locale-gen`以生成 locale 信息：
-```
-locale-gen
-```
-然后创建`/etc/locale.conf`文件，并编辑设定 LANG 变量：
-```
-LANG=en_US.UTF-8
-```
-并不推荐在此设置任何中文 locale，这可能会导致 tty 上中文显示为方块。">
+本指南从已启动的 Arch Live 环境开始。">
 <meta property="og:title" content="Arch Linux 基础安装">
 <meta property="og:description" content="# Arch Linux 基础安装
 
-本文基于，已通过包括但不限于U盘刻录ISO镜像等方式，启动进入到 Live 环境下
-
-安装将全部以 UEFI+GPT 的形式进行，传统 BIOS 方式不再赘述
-
-安装 Arch Linux 的过程中需要**稳定的网络连接**
-
-如果只能使用无线网络，需要事先把 Wi-Fi 名称改成英文，因为安装时无法显示和输入中文
-
-## 1. 禁用 reflector 服务
-
-2020 年，Arch Linux安装镜像中加入了`reflector`服务，`reflector`会自动选择速度合适的镜像源，但结果并不准确，特定情况下，它会误删某些有用的源信息
-
-通过以下命令将该服务禁用：
-```
-systemctl stop reflector.service
-```
-## 2. 验证是否为 UEFI 引导模式
-
-执行命令：
-```
-ls /sys/firmware/efi/efivars
-```
-如果输出了一堆东西(EFI变量)，则说明已在 UEFI 模式
-
-## 3. 连接网络
-
-大部分情况下，DHCP能很好地自动配置IP和DNS，如果需要配置静态IP和DNS，自行参考Arch Wiki
-
-对于有线连接，插入网线即可
-
-对于无线连接，则需进行如下操作
-
-无线连接使用`iwctl`命令进行，按照如下步骤进行网络连接：
-```
-iwctl                           #执行iwctl命令，进入交互式命令行
-device list                     #列出设备名，比如无线网卡叫wlan0
-station wlan0 scan              #扫描网络
-station wlan0 get-networks      #列出网络 比如想连接xxxxx这个无线网络
-station wlan0 connect xxxxx     #连接 输入密码
-exit                            #成功后exit退出
-```
-连接成功后通过`ping`测试网络连接：
-```
-ping www.baidu.com
-```
-
-## 4. 更新系统时间
-
-在 Live 环境中`systemd-timesyncd`默认启用，也就是说当系统已经创建互联网连接后，系统时间将自动同步
-
-使用`timedatectl`确保系统时间是同步的：
-```
-timedatectl
-```
-如果时间不同步，使用以下命令：
-```
-timedatectl set-ntp true    #将系统时间与网络时间进行同步
-timedatectl status          #检查服务状态
-```
-
-## 5. 磁盘分区
-
-使用`fdisk`查看并确定要操作的磁盘：
-```
-fdisk -l
-```
-本文使用以下分区方案：
-+ EFI 分区： `/efi`  
-+ 根分区： `/`  
-+ 用户主目录： `/home`  
-
-首先将磁盘转换为 GPT 格式，假设磁盘名称为`sdx`，NVME 的固态硬盘磁盘名称可能为`nvme0n1`
-```
-parted /dev/sdx     #执行parted，进入交互式命令行
-mklabel gpt         #将磁盘类型转换为GPT 如磁盘有数据会警告 输入yes即可
-quit                #quit退出parted命令行交互
-```
-**接下来使用分区工具 (fdisk、parted、cfdisk等等) 对磁盘进行分区，不同工具操作方式不同，此处不过多赘述**
-
-建议将 EFI 分区设置为磁盘的第一个分区，避免可能出现的兼容性问题
-
-分区结束后，用`fdisk`复查磁盘的情况：
-
-```
-fdisk -l
-```
-
-## 6. 格式化分区
-
-创建分区后，必须使用合适的文件系统对每个新创建的分区进行格式化
-
-以下命令中的`sdax`中，`x`代表分区的序号，与上一步创建分区时的序号对应
-
-使用`mkfs.ext4`格式化根分区和用户主目录：
-```
-mkfs.ext4 /dev/sdax
-```
-使用`mkfs.fat`格式化 EFI 分区：
-```
-mkfs.fat -F 32 /dev/sdax
-```
-
-## 7. 挂载分区
-
-挂载是有顺序的，必须先挂载根分区，再挂载其他分区，此处`sdax`仅为举例，请根据实际情况挂载
-
-将根分区挂载到 `/mnt`
-```
-mount /dev/sdax /mnt
-```
-挂载 EFI 分区
-```
-mount --mkdir /dev/sdax /mnt/efi
-```
-挂载用户主目录
-```
-mount --mkdir /dev/sdax /mnt/home
-```
-
-## 8. 选择镜像站
-
-`/etc/pacman.d/mirrorlist`定义了软件包会从哪个镜像站下载
-
-使用 `curl`从 archlinux 官方网站的镜像站列表下载位于中国大陆的 HTTPS 镜像站
-```
-curl -L 'https://archlinux.org/mirrorlist/?country=CN&protocol=https' -o /etc/pacman.d/mirrorlist
-```
-手动编辑`/etc/pacman.d/mirrorlist`，取消注释以启用镜像站
-
-## 9. 安装系统
-
-使用`pacstrap`安装必须的软件包：
-```
-pacstrap -K /mnt base base-devel linux-zen linux-zen-headers linux-firmware
-```
-功能性软件：
-```
-pacstrap -K /mnt sudo networkmanager nano vim
-```
-
-## 10. 生成 fstab 文件
-
-`fstab`用来定义磁盘分区
-```
-genfstab -U /mnt >> /mnt/etc/fstab
-```
-**强烈建议**在执行完以上命令后，检查一下生成的`/mnt/etc/fstab`文件是否正确
-
-## 11. chroot 到新安装的系统
-
-通过以下命令 chroot 到新安装的系统：
-```
-arch-chroot /mnt
-```
-
-## 12. 设置时区
-
-通过以下命令设置时区：
-```
-ln -sf /usr/share/zoneinfo/Region(地区名)/City(城市名) /etc/localtime
-```
-将当前的系统时间同步到硬件时钟：
-```
-hwclock --systohc
-```
-
-## 13. 区域和本地化设置
-
-编辑`/etc/locale.gen`，然后取消掉`en_US.UTF-8`和`zh_CN.UTF-8`的注释
-
-接着执行`locale-gen`以生成 locale 信息：
-```
-locale-gen
-```
-然后创建`/etc/locale.conf`文件，并编辑设定 LANG 变量：
-```
-LANG=en_US.UTF-8
-```
-并不推荐在此设置任何中文 locale，这可能会导致 tty 上中文显示为方块。">
+本指南从已启动的 Arch Live 环境开始。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bellisalpina.github.io/post/Arch%20Linux%20-ji-chu-an-zhuang.html">
 <meta property="og:image" content="https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg">
 <title>Arch Linux 基础安装</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -444,151 +88,119 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>Arch Linux 基础安装</h1>
-<p>本文基于，已通过包括但不限于U盘刻录ISO镜像等方式，启动进入到 Live 环境下</p>
-<p>安装将全部以 UEFI+GPT 的形式进行，传统 BIOS 方式不再赘述</p>
-<p>安装 Arch Linux 的过程中需要<strong>稳定的网络连接</strong></p>
-<p>如果只能使用无线网络，需要事先把 Wi-Fi 名称改成英文，因为安装时无法显示和输入中文</p>
+<p>本指南从已启动的 Arch Live 环境开始。假设已通过 U盘等方式启动 ISO 镜像。</p>
+<p>安装全程采用 UEFI + GPT 模式，不涉及传统 BIOS。</p>
+<p>安装过程需要<strong>稳定的网络连接</strong>。</p>
+<p>如果使用无线网络，确保网络名称（SSID）为英文，Live 环境无法显示或输入中文。</p>
 <h2>1. 禁用 reflector 服务</h2>
-<p>2020 年，Arch Linux安装镜像中加入了<code class="notranslate">reflector</code>服务，<code class="notranslate">reflector</code>会自动选择速度合适的镜像源，但结果并不准确，特定情况下，它会误删某些有用的源信息</p>
-<p>通过以下命令将该服务禁用：</p>
-<pre class="notranslate"><code class="notranslate">systemctl stop reflector.service
-</code></pre>
-<h2>2. 验证是否为 UEFI 引导模式</h2>
-<p>执行命令：</p>
-<pre class="notranslate"><code class="notranslate">ls /sys/firmware/efi/efivars
-</code></pre>
-<p>如果输出了一堆东西(EFI变量)，则说明已在 UEFI 模式</p>
+<p>Arch Linux 安装镜像默认启用 <code class="notranslate">reflector</code> 服务，其自动选择的镜像源可能不准确，甚至会移除可用源。因此先禁用它。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">systemctl stop reflector.service</pre></div>
+<h2>2. 验证 UEFI 引导模式</h2>
+<p>执行以下命令，检查 EFI 变量目录是否存在：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ls /sys/firmware/efi/efivars</pre></div>
+<p>如果该目录存在并列出文件，则说明系统处于 UEFI 模式。</p>
 <h2>3. 连接网络</h2>
-<p>大部分情况下，DHCP能很好地自动配置IP和DNS，如果需要配置静态IP和DNS，自行参考Arch Wiki</p>
-<p>对于有线连接，插入网线即可</p>
-<p>对于无线连接，则需进行如下操作</p>
-<p>无线连接使用<code class="notranslate">iwctl</code>命令进行，按照如下步骤进行网络连接：</p>
-<pre class="notranslate"><code class="notranslate">iwctl                           #执行iwctl命令，进入交互式命令行
-device list                     #列出设备名，比如无线网卡叫wlan0
-station wlan0 scan              #扫描网络
-station wlan0 get-networks      #列出网络 比如想连接xxxxx这个无线网络
-station wlan0 connect xxxxx     #连接 输入密码
-exit                            #成功后exit退出
-</code></pre>
-<p>连接成功后通过<code class="notranslate">ping</code>测试网络连接：</p>
-<pre class="notranslate"><code class="notranslate">ping www.baidu.com
-</code></pre>
-<h2>4. 更新系统时间</h2>
-<p>在 Live 环境中<code class="notranslate">systemd-timesyncd</code>默认启用，也就是说当系统已经创建互联网连接后，系统时间将自动同步</p>
-<p>使用<code class="notranslate">timedatectl</code>确保系统时间是同步的：</p>
-<pre class="notranslate"><code class="notranslate">timedatectl
-</code></pre>
-<p>如果时间不同步，使用以下命令：</p>
-<pre class="notranslate"><code class="notranslate">timedatectl set-ntp true    #将系统时间与网络时间进行同步
-timedatectl status          #检查服务状态
-</code></pre>
+<p>Live 环境默认使用 DHCP 自动配置网络。如需静态 IP，参考 Arch Wiki。</p>
+<ul>
+<li><strong>有线连接</strong>：插入网线即可。</li>
+<li><strong>无线连接</strong>：使用 <code class="notranslate">iwctl</code> 工具。</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">iwctl                           <span class="pl-c"><span class="pl-c">#</span> 进入 iwctl 交互式命令行</span>
+device list                     <span class="pl-c"><span class="pl-c">#</span> 列出网络设备，例如 wlan0</span>
+station wlan0 scan              <span class="pl-c"><span class="pl-c">#</span> 扫描网络</span>
+station wlan0 get-networks      <span class="pl-c"><span class="pl-c">#</span> 列出可用网络</span>
+station wlan0 connect YOUR_SSID <span class="pl-c"><span class="pl-c">#</span> 连接网络，替换 YOUR_SSID 为实际名称，然后输入密码</span>
+<span class="pl-c1">exit</span>                            <span class="pl-c"><span class="pl-c">#</span> 连接成功后退出</span></pre></div>
+<p>使用 <code class="notranslate">ping</code> 测试网络连通性：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ping www.baidu.com</pre></div>
+<h2>4. 同步系统时间</h2>
+<p>Live 环境默认启用 <code class="notranslate">systemd-timesyncd</code>，联网后会自动同步时间。</p>
+<p>用 <code class="notranslate">timedatectl</code> 确认时间同步状态：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">timedatectl status</pre></div>
+<p>如果时间未同步，执行以下命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">timedatectl set-ntp <span class="pl-c1">true</span></pre></div>
 <h2>5. 磁盘分区</h2>
-<p>使用<code class="notranslate">fdisk</code>查看并确定要操作的磁盘：</p>
-<pre class="notranslate"><code class="notranslate">fdisk -l
-</code></pre>
-<p>本文使用以下分区方案：</p>
+<p>使用 <code class="notranslate">fdisk -l</code> 查看并确定要操作的磁盘，例如 <code class="notranslate">/dev/sda</code> 或 <code class="notranslate">/dev/nvme0n1</code>。</p>
+<p>本指南采用以下分区方案：</p>
 <ul>
 <li>EFI 分区： <code class="notranslate">/efi</code></li>
 <li>根分区： <code class="notranslate">/</code></li>
 <li>用户主目录： <code class="notranslate">/home</code></li>
 </ul>
-<p>首先将磁盘转换为 GPT 格式，假设磁盘名称为<code class="notranslate">sdx</code>，NVME 的固态硬盘磁盘名称可能为<code class="notranslate">nvme0n1</code></p>
-<pre class="notranslate"><code class="notranslate">parted /dev/sdx     #执行parted，进入交互式命令行
-mklabel gpt         #将磁盘类型转换为GPT 如磁盘有数据会警告 输入yes即可
-quit                #quit退出parted命令行交互
-</code></pre>
-<p><strong>接下来使用分区工具 (fdisk、parted、cfdisk等等) 对磁盘进行分区，不同工具操作方式不同，此处不过多赘述</strong></p>
-<p>建议将 EFI 分区设置为磁盘的第一个分区，避免可能出现的兼容性问题</p>
-<p>分区结束后，用<code class="notranslate">fdisk</code>复查磁盘的情况：</p>
-<pre class="notranslate"><code class="notranslate">fdisk -l
-</code></pre>
+<p>首先，将磁盘转换为 GPT 格式（以 <code class="notranslate">/dev/sdx</code> 为例）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">parted /dev/sdx
+mklabel gpt
+quit</pre></div>
+<p><strong>接下来使用 <code class="notranslate">fdisk</code>、<code class="notranslate">cfdisk</code> 等工具进行分区。具体操作因工具而异，此处不展开。</strong></p>
+<p>建议将 EFI 分区设为磁盘的第一个分区，以避免潜在的兼容性问题。</p>
+<p>分区结束后，用 <code class="notranslate">fdisk -l</code> 复查分区情况。</p>
 <h2>6. 格式化分区</h2>
-<p>创建分区后，必须使用合适的文件系统对每个新创建的分区进行格式化</p>
-<p>以下命令中的<code class="notranslate">sdax</code>中，<code class="notranslate">x</code>代表分区的序号，与上一步创建分区时的序号对应</p>
-<p>使用<code class="notranslate">mkfs.ext4</code>格式化根分区和用户主目录：</p>
-<pre class="notranslate"><code class="notranslate">mkfs.ext4 /dev/sdax
-</code></pre>
-<p>使用<code class="notranslate">mkfs.fat</code>格式化 EFI 分区：</p>
-<pre class="notranslate"><code class="notranslate">mkfs.fat -F 32 /dev/sdax
-</code></pre>
+<p>对新创建的分区进行格式化。下文 <code class="notranslate">sdax</code> 中的 <code class="notranslate">x</code> 为分区号，请根据实际情况替换。</p>
+<p>格式化根分区和用户主目录为 <code class="notranslate">ext4</code>：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mkfs.ext4 /dev/sdax</pre></div>
+<p>格式化 EFI 分区为 <code class="notranslate">FAT32</code>：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mkfs.fat -F 32 /dev/sdax</pre></div>
 <h2>7. 挂载分区</h2>
-<p>挂载是有顺序的，必须先挂载根分区，再挂载其他分区，此处<code class="notranslate">sdax</code>仅为举例，请根据实际情况挂载</p>
-<p>将根分区挂载到 <code class="notranslate">/mnt</code></p>
-<pre class="notranslate"><code class="notranslate">mount /dev/sdax /mnt
-</code></pre>
-<p>挂载 EFI 分区</p>
-<pre class="notranslate"><code class="notranslate">mount --mkdir /dev/sdax /mnt/efi
-</code></pre>
-<p>挂载用户主目录</p>
-<pre class="notranslate"><code class="notranslate">mount --mkdir /dev/sdax /mnt/home
-</code></pre>
+<p>挂载顺序必须正确：先挂载根分区 (<code class="notranslate">/</code>)，再挂载其他分区。</p>
+<p>挂载根分区：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mount /dev/sdax /mnt</pre></div>
+<p>挂载 EFI 分区：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mount --mkdir /dev/sdax /mnt/efi</pre></div>
+<p>挂载用户主目录：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mount --mkdir /dev/sdax /mnt/home</pre></div>
 <h2>8. 选择镜像站</h2>
-<p><code class="notranslate">/etc/pacman.d/mirrorlist</code>定义了软件包会从哪个镜像站下载</p>
-<p>使用 <code class="notranslate">curl</code>从 archlinux 官方网站的镜像站列表下载位于中国大陆的 HTTPS 镜像站</p>
-<pre class="notranslate"><code class="notranslate">curl -L 'https://archlinux.org/mirrorlist/?country=CN&amp;protocol=https' -o /etc/pacman.d/mirrorlist
-</code></pre>
-<p>手动编辑<code class="notranslate">/etc/pacman.d/mirrorlist</code>，取消注释以启用镜像站</p>
+<p><code class="notranslate">/etc/pacman.d/mirrorlist</code> 文件定义了软件包的下载镜像源。</p>
+<p>使用 <code class="notranslate">curl</code> 获取中国大陆的 HTTPS 镜像源列表：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -L <span class="pl-s"><span class="pl-pds">'</span>https://archlinux.org/mirrorlist/?country=CN&amp;protocol=https<span class="pl-pds">'</span></span> -o /etc/pacman.d/mirrorlist</pre></div>
+<p>编辑 <code class="notranslate">/etc/pacman.d/mirrorlist</code>，取消所需镜像站的注释。</p>
 <h2>9. 安装系统</h2>
-<p>使用<code class="notranslate">pacstrap</code>安装必须的软件包：</p>
-<pre class="notranslate"><code class="notranslate">pacstrap -K /mnt base base-devel linux-zen linux-zen-headers linux-firmware
-</code></pre>
-<p>功能性软件：</p>
-<pre class="notranslate"><code class="notranslate">pacstrap -K /mnt sudo networkmanager nano vim
-</code></pre>
+<p>使用 <code class="notranslate">pacstrap</code> 安装基础包、内核及一些必要工具：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">pacstrap -K /mnt base base-devel linux-zen linux-zen-headers linux-firmware sudo networkmanager nano vim</pre></div>
 <h2>10. 生成 fstab 文件</h2>
-<p><code class="notranslate">fstab</code>用来定义磁盘分区</p>
-<pre class="notranslate"><code class="notranslate">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
-</code></pre>
-<p><strong>强烈建议</strong>在执行完以上命令后，检查一下生成的<code class="notranslate">/mnt/etc/fstab</code>文件是否正确</p>
-<h2>11. chroot 到新安装的系统</h2>
-<p>通过以下命令 chroot 到新安装的系统：</p>
-<pre class="notranslate"><code class="notranslate">arch-chroot /mnt
-</code></pre>
+<p><code class="notranslate">fstab</code> 用于定义磁盘分区及其挂载信息。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">genfstab -U /mnt <span class="pl-k">&gt;&gt;</span> /mnt/etc/fstab</pre></div>
+<p><strong>务必检查</strong>生成的 <code class="notranslate">/mnt/etc/fstab</code> 文件内容是否正确。</p>
+<h2>11. 切换到新系统</h2>
+<p>执行 <code class="notranslate">arch-chroot</code> 切换到新安装的系统：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">arch-chroot /mnt</pre></div>
 <h2>12. 设置时区</h2>
-<p>通过以下命令设置时区：</p>
-<pre class="notranslate"><code class="notranslate">ln -sf /usr/share/zoneinfo/Region(地区名)/City(城市名) /etc/localtime
-</code></pre>
-<p>将当前的系统时间同步到硬件时钟：</p>
-<pre class="notranslate"><code class="notranslate">hwclock --systohc
-</code></pre>
+<p>设置时区（以上海为例）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</pre></div>
+<p>将系统时间写入硬件时钟：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hwclock --systohc</pre></div>
 <h2>13. 区域和本地化设置</h2>
-<p>编辑<code class="notranslate">/etc/locale.gen</code>，然后取消掉<code class="notranslate">en_US.UTF-8</code>和<code class="notranslate">zh_CN.UTF-8</code>的注释</p>
-<p>接着执行<code class="notranslate">locale-gen</code>以生成 locale 信息：</p>
-<pre class="notranslate"><code class="notranslate">locale-gen
-</code></pre>
-<p>然后创建<code class="notranslate">/etc/locale.conf</code>文件，并编辑设定 LANG 变量：</p>
-<pre class="notranslate"><code class="notranslate">LANG=en_US.UTF-8
-</code></pre>
-<p>并不推荐在此设置任何中文 locale，这可能会导致 tty 上中文显示为方块。如果不经常使用 tty ，或是稍后需要安装桌面环境，则在不使用 tty 后可以设置为中文的 locale</p>
+<p>编辑 <code class="notranslate">/etc/locale.gen</code>，取消 <code class="notranslate">en_US.UTF-8 UTF-8</code> 和 <code class="notranslate">zh_CN.UTF-8 UTF-8</code> 的注释。</p>
+<p>执行 <code class="notranslate">locale-gen</code> 生成 locale 信息：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">locale-gen</pre></div>
+<p>创建 <code class="notranslate">/etc/locale.conf</code> 文件，设置语言环境：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>LANG=en_US.UTF-8<span class="pl-pds">'</span></span> <span class="pl-k">&gt;</span> /etc/locale.conf</pre></div>
+<p>此处不推荐设置中文 locale，否则 tty 可能显示为方块。后续安装桌面环境后可再修改。</p>
 <h2>14. 设置主机名</h2>
-<p>创建<code class="notranslate">hostname</code>文件：</p>
-<pre class="notranslate"><code class="notranslate">echo '主机名' &gt; /etc/hostname
-</code></pre>
-<p>编辑<code class="notranslate">/etc/hosts</code>文件，加入以下内容：</p>
+<p>创建 <code class="notranslate">/etc/hostname</code> 文件，写入主机名（例如 <code class="notranslate">myarch</code>）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>myarch<span class="pl-pds">'</span></span> <span class="pl-k">&gt;</span> /etc/hostname</pre></div>
+<p>编辑 <code class="notranslate">/etc/hosts</code> 文件，添加以下内容：</p>
 <pre class="notranslate"><code class="notranslate">127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   主机名
+127.0.1.1   myarch
 </code></pre>
 <h2>15. 设置 root 密码</h2>
-<p>使用以下命令设置 root 密码：</p>
-<pre class="notranslate"><code class="notranslate">passwd root
-</code></pre>
+<p>设置 root 密码：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">passwd</pre></div>
 <h2>16. 安装引导程序</h2>
-<p>GRUB 是启动引导器，efibootmgr 被 GRUB 脚本用来将启动项写入 NVRAM</p>
-<pre class="notranslate"><code class="notranslate">pacman -S grub efibootmgr
-</code></pre>
-<p>将 GRUB 安装到硬盘上：</p>
-<pre class="notranslate"><code class="notranslate">grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
-</code></pre>
-<p>N卡用户注意，如果需要使用 wayland，则需开启 DRM，编辑<code class="notranslate">/etc/default/grub</code>文件，在<code class="notranslate">GRUB_CMDLINE_LINUX_DEFAULT</code>一行末尾加入参数<code class="notranslate">nvidia_drm.modeset=1</code></p>
-<p>最后生成 grub.cfg 配置文件：</p>
-<pre class="notranslate"><code class="notranslate">grub-mkconfig -o /boot/grub/grub.cfg
-</code></pre>
+<p>安装 GRUB（引导器）和 efibootmgr（用于管理 UEFI 启动项）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">pacman -S grub efibootmgr</pre></div>
+<p>安装 GRUB 到 EFI 分区：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB</pre></div>
+<p>NVIDIA 用户注意：若需使用 Wayland，需开启 DRM。编辑 <code class="notranslate">/etc/default/grub</code> 文件，在 <code class="notranslate">GRUB_CMDLINE_LINUX_DEFAULT</code> 一行末尾加入参数 <code class="notranslate">nvidia_drm.modeset=1</code>。</p>
+<p>生成 GRUB 配置文件：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">grub-mkconfig -o /boot/grub/grub.cfg</pre></div>
 <h2>17. 完成安装</h2>
-<p>输入<code class="notranslate">exit</code>退出 chroot 环境</p>
-<p>输入<code class="notranslate">umount -R /mnt</code>卸载被挂载的分区</p>
-<p>最后执行<code class="notranslate">reboot</code>重启系统，重启前别忘了移除安装介质</p>
-<p>至此，一个基础的、无图形界面的 Arch Linux 就安装完成了</p></div>
+<ol>
+<li>输入 <code class="notranslate">exit</code> 退出 chroot 环境。</li>
+<li>执行 <code class="notranslate">umount -R /mnt</code> 卸载所有分区。</li>
+<li>执行 <code class="notranslate">reboot</code> 重启系统。重启前移除 U盘 等安装介质。</li>
+</ol>
+<p>至此，一个基础的 Arch Linux 系统安装完成。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>

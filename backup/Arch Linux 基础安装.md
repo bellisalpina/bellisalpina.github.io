@@ -1,228 +1,251 @@
 # Arch Linux 基础安装
 
-本文基于，已通过包括但不限于U盘刻录ISO镜像等方式，启动进入到 Live 环境下
+本指南从已启动的 Arch Live 环境开始。假设已通过 U盘等方式启动 ISO 镜像。
 
-安装将全部以 UEFI+GPT 的形式进行，传统 BIOS 方式不再赘述
+安装全程采用 UEFI + GPT 模式，不涉及传统 BIOS。
 
-安装 Arch Linux 的过程中需要**稳定的网络连接**
+安装过程需要**稳定的网络连接**。
 
-如果只能使用无线网络，需要事先把 Wi-Fi 名称改成英文，因为安装时无法显示和输入中文
+如果使用无线网络，确保网络名称（SSID）为英文，Live 环境无法显示或输入中文。
 
 ## 1. 禁用 reflector 服务
 
-2020 年，Arch Linux安装镜像中加入了`reflector`服务，`reflector`会自动选择速度合适的镜像源，但结果并不准确，特定情况下，它会误删某些有用的源信息
+Arch Linux 安装镜像默认启用 `reflector` 服务，其自动选择的镜像源可能不准确，甚至会移除可用源。因此先禁用它。
 
-通过以下命令将该服务禁用：
-```
+```bash
 systemctl stop reflector.service
 ```
-## 2. 验证是否为 UEFI 引导模式
 
-执行命令：
-```
+## 2. 验证 UEFI 引导模式
+
+执行以下命令，检查 EFI 变量目录是否存在：
+
+```bash
 ls /sys/firmware/efi/efivars
 ```
-如果输出了一堆东西(EFI变量)，则说明已在 UEFI 模式
+
+如果该目录存在并列出文件，则说明系统处于 UEFI 模式。
 
 ## 3. 连接网络
 
-大部分情况下，DHCP能很好地自动配置IP和DNS，如果需要配置静态IP和DNS，自行参考Arch Wiki
+Live 环境默认使用 DHCP 自动配置网络。如需静态 IP，参考 Arch Wiki。
 
-对于有线连接，插入网线即可
+*   **有线连接**：插入网线即可。
+*   **无线连接**：使用 `iwctl` 工具。
 
-对于无线连接，则需进行如下操作
+```bash
+iwctl                           # 进入 iwctl 交互式命令行
+device list                     # 列出网络设备，例如 wlan0
+station wlan0 scan              # 扫描网络
+station wlan0 get-networks      # 列出可用网络
+station wlan0 connect YOUR_SSID # 连接网络，替换 YOUR_SSID 为实际名称，然后输入密码
+exit                            # 连接成功后退出
+```
 
-无线连接使用`iwctl`命令进行，按照如下步骤进行网络连接：
-```
-iwctl                           #执行iwctl命令，进入交互式命令行
-device list                     #列出设备名，比如无线网卡叫wlan0
-station wlan0 scan              #扫描网络
-station wlan0 get-networks      #列出网络 比如想连接xxxxx这个无线网络
-station wlan0 connect xxxxx     #连接 输入密码
-exit                            #成功后exit退出
-```
-连接成功后通过`ping`测试网络连接：
-```
+使用 `ping` 测试网络连通性：
+
+```bash
 ping www.baidu.com
 ```
 
-## 4. 更新系统时间
+## 4. 同步系统时间
 
-在 Live 环境中`systemd-timesyncd`默认启用，也就是说当系统已经创建互联网连接后，系统时间将自动同步
+Live 环境默认启用 `systemd-timesyncd`，联网后会自动同步时间。
 
-使用`timedatectl`确保系统时间是同步的：
+用 `timedatectl` 确认时间同步状态：
+
+```bash
+timedatectl status
 ```
-timedatectl
-```
-如果时间不同步，使用以下命令：
-```
-timedatectl set-ntp true    #将系统时间与网络时间进行同步
-timedatectl status          #检查服务状态
+
+如果时间未同步，执行以下命令：
+
+```bash
+timedatectl set-ntp true
 ```
 
 ## 5. 磁盘分区
 
-使用`fdisk`查看并确定要操作的磁盘：
-```
-fdisk -l
-```
-本文使用以下分区方案：
-+ EFI 分区： `/efi`  
-+ 根分区： `/`  
-+ 用户主目录： `/home`  
+使用 `fdisk -l` 查看并确定要操作的磁盘，例如 `/dev/sda` 或 `/dev/nvme0n1`。
 
-首先将磁盘转换为 GPT 格式，假设磁盘名称为`sdx`，NVME 的固态硬盘磁盘名称可能为`nvme0n1`
-```
-parted /dev/sdx     #执行parted，进入交互式命令行
-mklabel gpt         #将磁盘类型转换为GPT 如磁盘有数据会警告 输入yes即可
-quit                #quit退出parted命令行交互
-```
-**接下来使用分区工具 (fdisk、parted、cfdisk等等) 对磁盘进行分区，不同工具操作方式不同，此处不过多赘述**
+本指南采用以下分区方案：
 
-建议将 EFI 分区设置为磁盘的第一个分区，避免可能出现的兼容性问题
+*   EFI 分区： `/efi`
+*   根分区： `/`
+*   用户主目录： `/home`
 
-分区结束后，用`fdisk`复查磁盘的情况：
+首先，将磁盘转换为 GPT 格式（以 `/dev/sdx` 为例）：
 
+```bash
+parted /dev/sdx
+mklabel gpt
+quit
 ```
-fdisk -l
-```
+
+**接下来使用 `fdisk`、`cfdisk` 等工具进行分区。具体操作因工具而异，此处不展开。**
+
+建议将 EFI 分区设为磁盘的第一个分区，以避免潜在的兼容性问题。
+
+分区结束后，用 `fdisk -l` 复查分区情况。
 
 ## 6. 格式化分区
 
-创建分区后，必须使用合适的文件系统对每个新创建的分区进行格式化
+对新创建的分区进行格式化。下文 `sdax` 中的 `x` 为分区号，请根据实际情况替换。
 
-以下命令中的`sdax`中，`x`代表分区的序号，与上一步创建分区时的序号对应
+格式化根分区和用户主目录为 `ext4`：
 
-使用`mkfs.ext4`格式化根分区和用户主目录：
-```
+```bash
 mkfs.ext4 /dev/sdax
 ```
-使用`mkfs.fat`格式化 EFI 分区：
-```
+
+格式化 EFI 分区为 `FAT32`：
+
+```bash
 mkfs.fat -F 32 /dev/sdax
 ```
 
 ## 7. 挂载分区
 
-挂载是有顺序的，必须先挂载根分区，再挂载其他分区，此处`sdax`仅为举例，请根据实际情况挂载
+挂载顺序必须正确：先挂载根分区 (`/`)，再挂载其他分区。
 
-将根分区挂载到 `/mnt`
-```
+挂载根分区：
+
+```bash
 mount /dev/sdax /mnt
 ```
-挂载 EFI 分区
-```
+
+挂载 EFI 分区：
+
+```bash
 mount --mkdir /dev/sdax /mnt/efi
 ```
-挂载用户主目录
-```
+
+挂载用户主目录：
+
+```bash
 mount --mkdir /dev/sdax /mnt/home
 ```
 
 ## 8. 选择镜像站
 
-`/etc/pacman.d/mirrorlist`定义了软件包会从哪个镜像站下载
+`/etc/pacman.d/mirrorlist` 文件定义了软件包的下载镜像源。
 
-使用 `curl`从 archlinux 官方网站的镜像站列表下载位于中国大陆的 HTTPS 镜像站
-```
+使用 `curl` 获取中国大陆的 HTTPS 镜像源列表：
+
+```bash
 curl -L 'https://archlinux.org/mirrorlist/?country=CN&protocol=https' -o /etc/pacman.d/mirrorlist
 ```
-手动编辑`/etc/pacman.d/mirrorlist`，取消注释以启用镜像站
+
+编辑 `/etc/pacman.d/mirrorlist`，取消所需镜像站的注释。
 
 ## 9. 安装系统
 
-使用`pacstrap`安装必须的软件包：
-```
-pacstrap -K /mnt base base-devel linux-zen linux-zen-headers linux-firmware
-```
-功能性软件：
-```
-pacstrap -K /mnt sudo networkmanager nano vim
+使用 `pacstrap` 安装基础包、内核及一些必要工具：
+
+```bash
+pacstrap -K /mnt base base-devel linux-zen linux-zen-headers linux-firmware sudo networkmanager nano vim
 ```
 
 ## 10. 生成 fstab 文件
 
-`fstab`用来定义磁盘分区
-```
+`fstab` 用于定义磁盘分区及其挂载信息。
+
+```bash
 genfstab -U /mnt >> /mnt/etc/fstab
 ```
-**强烈建议**在执行完以上命令后，检查一下生成的`/mnt/etc/fstab`文件是否正确
 
-## 11. chroot 到新安装的系统
+**务必检查**生成的 `/mnt/etc/fstab` 文件内容是否正确。
 
-通过以下命令 chroot 到新安装的系统：
-```
+## 11. 切换到新系统
+
+执行 `arch-chroot` 切换到新安装的系统：
+
+```bash
 arch-chroot /mnt
 ```
 
 ## 12. 设置时区
 
-通过以下命令设置时区：
+设置时区（以上海为例）：
+
+```bash
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ```
-ln -sf /usr/share/zoneinfo/Region(地区名)/City(城市名) /etc/localtime
-```
-将当前的系统时间同步到硬件时钟：
-```
+
+将系统时间写入硬件时钟：
+
+```bash
 hwclock --systohc
 ```
 
 ## 13. 区域和本地化设置
 
-编辑`/etc/locale.gen`，然后取消掉`en_US.UTF-8`和`zh_CN.UTF-8`的注释
+编辑 `/etc/locale.gen`，取消 `en_US.UTF-8 UTF-8` 和 `zh_CN.UTF-8 UTF-8` 的注释。
 
-接着执行`locale-gen`以生成 locale 信息：
-```
+执行 `locale-gen` 生成 locale 信息：
+
+```bash
 locale-gen
 ```
-然后创建`/etc/locale.conf`文件，并编辑设定 LANG 变量：
+
+创建 `/etc/locale.conf` 文件，设置语言环境：
+
+```bash
+echo 'LANG=en_US.UTF-8' > /etc/locale.conf
 ```
-LANG=en_US.UTF-8
-```
-并不推荐在此设置任何中文 locale，这可能会导致 tty 上中文显示为方块。如果不经常使用 tty ，或是稍后需要安装桌面环境，则在不使用 tty 后可以设置为中文的 locale
+
+此处不推荐设置中文 locale，否则 tty 可能显示为方块。后续安装桌面环境后可再修改。
 
 ## 14. 设置主机名
 
-创建`hostname`文件：
+创建 `/etc/hostname` 文件，写入主机名（例如 `myarch`）：
+
+```bash
+echo 'myarch' > /etc/hostname
 ```
-echo '主机名' > /etc/hostname
-```
-编辑`/etc/hosts`文件，加入以下内容：
+
+编辑 `/etc/hosts` 文件，添加以下内容：
+
 ```
 127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   主机名
+127.0.1.1   myarch
 ```
 
 ## 15. 设置 root 密码
 
-使用以下命令设置 root 密码：
-```
-passwd root
+设置 root 密码：
+
+```bash
+passwd
 ```
 
 ## 16. 安装引导程序
 
-GRUB 是启动引导器，efibootmgr 被 GRUB 脚本用来将启动项写入 NVRAM
-```
+安装 GRUB（引导器）和 efibootmgr（用于管理 UEFI 启动项）：
+
+```bash
 pacman -S grub efibootmgr
 ```
-将 GRUB 安装到硬盘上：
-```
+
+安装 GRUB 到 EFI 分区：
+
+```bash
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 ```
-N卡用户注意，如果需要使用 wayland，则需开启 DRM，编辑`/etc/default/grub`文件，在`GRUB_CMDLINE_LINUX_DEFAULT`一行末尾加入参数`nvidia_drm.modeset=1`
 
-最后生成 grub.cfg 配置文件：
-```
+NVIDIA 用户注意：若需使用 Wayland，需开启 DRM。编辑 `/etc/default/grub` 文件，在 `GRUB_CMDLINE_LINUX_DEFAULT` 一行末尾加入参数 `nvidia_drm.modeset=1`。
+
+生成 GRUB 配置文件：
+
+```bash
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ## 17. 完成安装
 
-输入`exit`退出 chroot 环境
+1.  输入 `exit` 退出 chroot 环境。
+2.  执行 `umount -R /mnt` 卸载所有分区。
+3.  执行 `reboot` 重启系统。重启前移除 U盘 等安装介质。
 
-输入`umount -R /mnt`卸载被挂载的分区
-
-最后执行`reboot`重启系统，重启前别忘了移除安装介质
-
-至此，一个基础的、无图形界面的 Arch Linux 就安装完成了
+至此，一个基础的 Arch Linux 系统安装完成。
