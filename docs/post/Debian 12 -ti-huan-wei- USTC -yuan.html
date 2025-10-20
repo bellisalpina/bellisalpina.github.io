@@ -106,7 +106,6 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <span class="pl-s"># deb-src https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware</span>
 <span class="pl-s"><span class="pl-k">EOF</span></span></pre></div>
 <blockquote>
-<p><strong>说明</strong>：</p>
 <ul>
 <li>这里使用 <code class="notranslate">tee</code> 和 <code class="notranslate">&lt;&lt;EOF</code> 的方式，比 <code class="notranslate">echo</code> 更清晰地处理多行文本，并且避免了 <code class="notranslate">echo</code> 命令中可能存在的引号转义问题。</li>
 <li><code class="notranslate">tee ... &gt; /dev/null</code> 的作用是写入文件时不在终端显示内容。</li>
