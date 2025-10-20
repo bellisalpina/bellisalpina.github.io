@@ -100,7 +100,6 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </ul>
 <p>执行命令后，会提示设置一个<strong>密码短语</strong>。</p>
 <blockquote>
-<p><strong>提示</strong>：</p>
 <ul>
 <li>设置密码短语可以为私钥增加一层额外的安全保护。即使私钥文件泄露，攻击者仍需此密码才能使用。</li>
 <li>也可以直接按回车留空，这样登录时无需输入密码，更便捷，但安全性会降低。</li>
@@ -118,19 +117,23 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h3>方法二：手动部署</h3>
 <p>在某些环境下（例如部分 Windows 系统），可能没有 <code class="notranslate">ssh-copy-id</code> 命令。此时可以手动进行部署：</p>
 <ol>
-<li><strong>登录服务器</strong>：
+<li>
+<p><strong>登录服务器</strong>：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ssh user@example.com</pre></div>
 </li>
-<li><strong>创建 <code class="notranslate">.ssh</code> 目录</strong>（如果尚不存在）：
+<li>
+<p><strong>创建 <code class="notranslate">.ssh</code> 目录</strong>（如果尚不存在）：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">mkdir -p <span class="pl-k">~</span>/.ssh</pre></div>
 </li>
-<li><strong>将公钥内容追加到 <code class="notranslate">authorized_keys</code> 文件</strong>：<br>
-首先，在<strong>本地机器</strong>上查看并复制公钥内容：
+<li>
+<p><strong>将公钥内容追加到 <code class="notranslate">authorized_keys</code> 文件</strong>：</p>
+<p>首先，在<strong>本地机器</strong>上查看并复制公钥内容：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-k">~</span>/.ssh/id_ed25519.pub</pre></div>
-然后，在<strong>服务器</strong>上，将复制的内容追加到 <code class="notranslate">authorized_keys</code> 文件中：
+<p>然后，在<strong>服务器</strong>上，将复制的内容追加到 <code class="notranslate">authorized_keys</code> 文件中：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>你的公钥内容<span class="pl-pds">"</span></span> <span class="pl-k">&gt;&gt;</span> <span class="pl-k">~</span>/.ssh/authorized_keys</pre></div>
 </li>
-<li><strong>设置正确的文件权限</strong>（非常重要！）：
+<li>
+<p><strong>设置正确的文件权限</strong>（非常重要！）：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">chmod 600 <span class="pl-k">~</span>/.ssh/authorized_keys
 chmod 700 <span class="pl-k">~</span>/.ssh</pre></div>
 <ul>
