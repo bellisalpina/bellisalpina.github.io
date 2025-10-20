@@ -10,100 +10,16 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="# 为Git设置代理
-
-> 以**Clash**为例  
-
-## HTTP/HTTPS协议  
-使用 HTTP / HTTPS 传输协议连接到 Git 仓库的 URL 实例如下：  
-```
-http://github.com/example/example.git
-https://github.com/example/example.git
-```
- 
-+ 全局代理  
-```
-git config --global http.proxy http://127.0.0.1:7890
-```
-+ 只代理Github  
-```
-git config --global http.https://github.com.proxy http://127.0.0.1:7890
-```
-+ 撤销全局代理  
-```
-git config --global --unset http.proxy
-```
-+ 撤销代理GitHub
-```
-git config --global --unset http.https://github.com.proxy
-```
-
-
-## SSH协议  
-使用 SSH 传输协议连接到 Git 仓库的 URL 实例如下：
-```
-git@github.com:example/example.git
-ssh://git@github.com/example/example.git
-```
-
-以下内容仅限**Windows**端Git  
-+ 编辑`C:\Users\example\.ssh\config`，输入以下内容：  
-```
-Host github.com
-    User git
-    ProxyCommand connect -H 127.0.0.1:7890 %h %p
-```
-+ 撤销代理：删除添加的内容。">
+<meta name="description" content="# Git 代理设置指南
+> 本文以 **Clash** 为例，介绍如何为 Git 配置网络代理。">
 <meta property="og:title" content="为Git设置代理">
-<meta property="og:description" content="# 为Git设置代理
-
-> 以**Clash**为例  
-
-## HTTP/HTTPS协议  
-使用 HTTP / HTTPS 传输协议连接到 Git 仓库的 URL 实例如下：  
-```
-http://github.com/example/example.git
-https://github.com/example/example.git
-```
- 
-+ 全局代理  
-```
-git config --global http.proxy http://127.0.0.1:7890
-```
-+ 只代理Github  
-```
-git config --global http.https://github.com.proxy http://127.0.0.1:7890
-```
-+ 撤销全局代理  
-```
-git config --global --unset http.proxy
-```
-+ 撤销代理GitHub
-```
-git config --global --unset http.https://github.com.proxy
-```
-
-
-## SSH协议  
-使用 SSH 传输协议连接到 Git 仓库的 URL 实例如下：
-```
-git@github.com:example/example.git
-ssh://git@github.com/example/example.git
-```
-
-以下内容仅限**Windows**端Git  
-+ 编辑`C:\Users\example\.ssh\config`，输入以下内容：  
-```
-Host github.com
-    User git
-    ProxyCommand connect -H 127.0.0.1:7890 %h %p
-```
-+ 撤销代理：删除添加的内容。">
+<meta property="og:description" content="# Git 代理设置指南
+> 本文以 **Clash** 为例，介绍如何为 Git 配置网络代理。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bellisalpina.github.io/post/wei-Git-she-zhi-dai-li.html">
 <meta property="og:image" content="https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg">
 <title>为Git设置代理</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -169,50 +85,53 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h1>为Git设置代理</h1>
+<div class="markdown-body" id="postBody"><h1>Git 代理设置指南</h1>
 <blockquote>
-<p>以<strong>Clash</strong>为例</p>
+<p>本文以 <strong>Clash</strong> 为例，介绍如何为 Git 配置网络代理。</p>
 </blockquote>
-<h2>HTTP/HTTPS协议</h2>
-<p>使用 HTTP / HTTPS 传输协议连接到 Git 仓库的 URL 实例如下：</p>
-<pre class="notranslate"><code class="notranslate">http://github.com/example/example.git
-https://github.com/example/example.git
-</code></pre>
-<ul>
-<li>全局代理</li>
-</ul>
-<pre class="notranslate"><code class="notranslate">git config --global http.proxy http://127.0.0.1:7890
-</code></pre>
-<ul>
-<li>只代理Github</li>
-</ul>
-<pre class="notranslate"><code class="notranslate">git config --global http.https://github.com.proxy http://127.0.0.1:7890
-</code></pre>
-<ul>
-<li>撤销全局代理</li>
-</ul>
-<pre class="notranslate"><code class="notranslate">git config --global --unset http.proxy
-</code></pre>
-<ul>
-<li>撤销代理GitHub</li>
-</ul>
-<pre class="notranslate"><code class="notranslate">git config --global --unset http.https://github.com.proxy
-</code></pre>
-<h2>SSH协议</h2>
-<p>使用 SSH 传输协议连接到 Git 仓库的 URL 实例如下：</p>
-<pre class="notranslate"><code class="notranslate">git@github.com:example/example.git
-ssh://git@github.com/example/example.git
-</code></pre>
-<p>以下内容仅限<strong>Windows</strong>端Git</p>
-<ul>
-<li>编辑<code class="notranslate">C:\Users\example\.ssh\config</code>，输入以下内容：</li>
-</ul>
-<pre class="notranslate"><code class="notranslate">Host github.com
+<h2>一、HTTP/HTTPS 协议代理</h2>
+<p>通过 HTTP/HTTPS 协议访问的 Git 仓库 URL 示例如下：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">http://github.com/example/example.git
+https://github.com/example/example.git</pre></div>
+<h3>1. 设置代理</h3>
+<h4>全局代理</h4>
+<p>为所有 <code class="notranslate">http</code> 和 <code class="notranslate">https</code> 的 Git 操作设置代理。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git config --global http.proxy http://127.0.0.1:7890
+git config --global https.proxy http://127.0.0.1:7890</pre></div>
+<h4>仅代理 GitHub</h4>
+<p>只为访问 <code class="notranslate">github.com</code> 设置代理，不影响其他 Git 服务器。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git config --global http.https://github.com.proxy http://127.0.0.1:7890</pre></div>
+<h3>2. 取消代理</h3>
+<h4>取消全局代理</h4>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git config --global --unset http.proxy
+git config --global --unset https.proxy</pre></div>
+<h4>取消 GitHub 代理</h4>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git config --global --unset http.https://github.com.proxy</pre></div>
+<h2>二、SSH 协议代理</h2>
+<p>通过 SSH 协议访问的 Git 仓库 URL 示例如下：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git@github.com:example/example.git
+ssh://git@github.com/example/example.git</pre></div>
+<blockquote>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <strong>注意</strong>：以下配置仅适用于 <strong>Windows</strong> 系统的 Git 客户端。</p>
+</blockquote>
+<h3>1. 配置代理</h3>
+<ol>
+<li>找到并编辑 SSH 配置文件。文件路径通常为：<br>
+<code class="notranslate">C:\Users\**你的用户名**\.ssh\config</code><br>
+（如果文件或目录不存在，请手动创建。）</li>
+<li>在文件末尾添加以下内容：
+<div class="highlight highlight-source-shell"><pre class="notranslate">Host github.com
     User git
-    ProxyCommand connect -H 127.0.0.1:7890 %h %p
-</code></pre>
+    ProxyCommand connect -H 127.0.0.1:7890 %h %p</pre></div>
+</li>
+</ol>
+<h3>2. 取消代理</h3>
+<p>打开上述 <code class="notranslate">config</code> 文件，<strong>删除或注释掉</strong>（在行首添加 <code class="notranslate">#</code>）为 <code class="notranslate">github.com</code> 添加的配置即可。</p>
+<h2>💡 小贴士</h2>
 <ul>
-<li>撤销代理：删除添加的内容</li>
+<li><strong>端口号</strong>：<code class="notranslate">7890</code> 是 Clash 的默认 HTTP 代理端口。如果你的 Clash 设置了其他端口，请相应修改。</li>
+<li><strong>验证代理</strong>：设置完成后，可以通过 <code class="notranslate">git config --global --get http.proxy</code> 命令查看当前的全局代理设置。</li>
+<li><strong><code class="notranslate">connect</code> 命令</strong>：Windows 版的 Git 通常自带 <code class="notranslate">connect.exe</code>，无需额外安装。</li>
 </ul></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
