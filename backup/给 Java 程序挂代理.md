@@ -5,31 +5,41 @@
 ## 1. 命令行设置 Socks5 代理
 
 通过在启动命令中添加 JVM 参数，可以快速为 Java 应用设置 Socks5 代理。
+
 ```bash
 java -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=7890 -jar xxxxx.jar
 ```
+
 **参数说明：**
+
 *   `socksProxyHost`: 指定代理服务器的地址。
 *   `socksProxyPort`: 指定代理服务器的端口。
+
 > 💡 **提示**：请将 `127.0.0.1` 和 `7890` 替换为你的实际代理地址和端口。
 
 ## 2. 命令行设置 HTTP/HTTPS 代理
 
 如果需要区分 HTTP 和 HTTPS 流量，可以分别设置对应的代理。
+
 ```bash
 java -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=7890 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=7890 -jar xxxxx.jar
 ```
+
 **参数说明：**
+
 *   `http.proxyHost` & `http.proxyPort`: 用于设置 HTTP 协议的代理。
 *   `https.proxyHost` & `https.proxyPort`: 用于设置 HTTPS 协议的代理。
+
 > ⚠️ **注意**：对于 HTTPS 连接，JVM 仍会先通过 HTTP 代理建立隧道，因此通常需要同时设置 HTTP 和 HTTPS 代理。
 
 ## 3. 使用系统默认代理
 
 让 Java 程序自动读取并使用操作系统中已配置的代理设置，是最便捷的方式。
+
 ```bash
 java -Djava.net.useSystemProxies=true -jar xxxxx.jar
 ```
+
 设置此参数后，Java 应用会尝试获取系统（如 Windows、macOS 的网络设置）中的代理配置。
 
 ## 💎 总结
