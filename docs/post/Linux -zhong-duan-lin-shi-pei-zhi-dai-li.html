@@ -113,8 +113,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>配置完成后，可以使用 <code class="notranslate">curl</code> 命令来验证代理是否生效。<code class="notranslate">-vv</code> 参数会显示详细的连接过程，便于排查问题。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">curl -vv https://www.github.com</pre></div>
 <blockquote>
-<p><strong>注意</strong>：</p>
-<p><code class="notranslate">ping</code> 命令使用 ICMP 协议，通常不经过 HTTP/SOCKS 代理。因此，即使代理设置成功，<code class="notranslate">ping</code> 外网域名也可能会失败。请使用 <code class="notranslate">curl</code> 或 <code class="notranslate">wget</code> 等基于 TCP 的工具进行测试。</p>
+<p><strong>注意</strong>：<br>
+<code class="notranslate">ping</code> 命令使用 ICMP 协议，通常不经过 HTTP/SOCKS 代理。因此，即使代理设置成功，<code class="notranslate">ping</code> 外网域名也可能会失败。请使用 <code class="notranslate">curl</code> 或 <code class="notranslate">wget</code> 等基于 TCP 的工具进行测试。</p>
 </blockquote></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
