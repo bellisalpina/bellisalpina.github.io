@@ -95,7 +95,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <div class="highlight highlight-source-shell"><pre class="notranslate">cp /etc/apt/sources.list /etc/apt/sources.list.bak</pre></div>
 <h3>2. 写入新的源列表</h3>
 <p>以下命令会直接覆盖 <code class="notranslate">/etc/apt/sources.list</code> 文件。</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">tee /etc/apt/sources.list <span class="pl-k">&gt;</span> /dev/null <span class="pl-s"><span class="pl-k">&lt;&lt;</span><span class="pl-k">EOF</span></span>
+<div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-s"><span class="pl-k">&lt;&lt;</span> <span class="pl-k">EOF</span> &gt; /etc/apt/sources.list</span>
 <span class="pl-s">deb https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span>
 <span class="pl-s"># deb-src https://mirrors.ustc.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span>
 <span class="pl-s">deb https://mirrors.ustc.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span>
@@ -105,12 +105,6 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <span class="pl-s">deb https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware</span>
 <span class="pl-s"># deb-src https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware</span>
 <span class="pl-s"><span class="pl-k">EOF</span></span></pre></div>
-<blockquote>
-<ul>
-<li>这里使用 <code class="notranslate">tee</code> 和 <code class="notranslate">&lt;&lt;EOF</code> 的方式，比 <code class="notranslate">echo</code> 更清晰地处理多行文本，并且避免了 <code class="notranslate">echo</code> 命令中可能存在的引号转义问题。</li>
-<li><code class="notranslate">tee ... &gt; /dev/null</code> 的作用是写入文件时不在终端显示内容。</li>
-</ul>
-</blockquote>
 <h3>3. 更新软件包列表</h3>
 <p>源文件替换后，必须执行更新命令，使新的源生效。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">apt update</pre></div></div>
