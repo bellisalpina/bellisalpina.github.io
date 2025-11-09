@@ -12,11 +12,11 @@
     </script>
 <meta name="description" content="# FFmpeg 常用命令
 
-FFmpeg 是一个强大的音视频处理工具。">
+FFmpeg 是一个功能强大的音视频处理工具集。">
 <meta property="og:title" content="FFmpeg 常用命令参考">
 <meta property="og:description" content="# FFmpeg 常用命令
 
-FFmpeg 是一个强大的音视频处理工具。">
+FFmpeg 是一个功能强大的音视频处理工具集。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bellisalpina.github.io/post/FFmpeg%20-chang-yong-ming-ling-can-kao.html">
 <meta property="og:image" content="https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg">
@@ -88,20 +88,21 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>FFmpeg 常用命令</h1>
-<p>FFmpeg 是一个强大的音视频处理工具。本文档提供一些常见使用场景的简单命令参考。</p>
-<h2>查看媒体文件信息</h2>
-<p>使用 <code class="notranslate">ffprobe</code> 获取流信息：</p>
+<p>FFmpeg 是一个功能强大的音视频处理工具集。本文档整理了其在常见场景下的实用命令，旨在作为一份快速参考指南。</p>
+<h2>1. 查看媒体文件信息</h2>
+<p>使用 <code class="notranslate">ffprobe</code> 获取详细的媒体信息，包括格式和流信息。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffprobe -v error -show_format -show_streams input.mp4</pre></div>
-<p>以 JSON 格式输出信息：</p>
+<p>将输出格式化为 JSON，便于程序解析和自动化处理。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffprobe -v error -show_format -show_streams -print_format json input.mp4</pre></div>
-<h2>视频剪辑</h2>
+<h2>2. 视频剪辑</h2>
+<p>视频剪辑的关键在于 <code class="notranslate">-ss</code>（起始时间）参数的位置，它决定了定位方式和精确度。</p>
 <markdown-accessiblity-table><table role="table">
 <thead>
 <tr>
 <th>参数顺序</th>
 <th>定位方式</th>
 <th>速度</th>
-<th>精确度</th>
+<th>定位精度</th>
 <th>说明</th>
 </tr>
 </thead>
@@ -110,81 +111,103 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <td><code class="notranslate">-ss</code> 在 <code class="notranslate">-i</code> 前</td>
 <td>输入定位</td>
 <td><strong>快</strong></td>
-<td>关键帧级精度</td>
-<td>快速裁剪，适用于不需要精确帧的场景</td>
+<td>关键帧级</td>
+<td>快速裁剪，适用于对起始点要求不高的场景</td>
 </tr>
 <tr>
 <td><code class="notranslate">-ss</code> 在 <code class="notranslate">-i</code> 后</td>
 <td>输出定位</td>
 <td><strong>慢</strong></td>
-<td>逐帧级精度</td>
-<td>精确到帧的裁剪或处理，速度较慢</td>
+<td>逐帧级</td>
+<td>精确裁剪，速度较慢，但结果精准</td>
 </tr>
 </tbody>
 </table></markdown-accessiblity-table>
-<h4>示例命令</h4>
+<h3>示例命令</h3>
 <ol>
 <li>
-<p><strong>输入定位（快速裁剪）</strong></p>
+<p><strong>快速裁剪（输入定位）</strong></p>
+<p>从第 30 秒附近的关键帧开始，快速截取 10 秒。速度最快，但起始位置可能不精确。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -ss 00:00:30 -i input.mp4 -t 10 -c copy output.mp4</pre></div>
-<p><em>从视频大约 30 秒处开始，快速截取 10 秒内容（可能存在几秒的偏差）。</em></p>
 </li>
 <li>
-<p><strong>输出定位（精确裁剪）</strong></p>
+<p><strong>精确裁剪（输出定位）</strong></p>
+<p>从第 30 秒精确位置开始，截取 10 秒。会重新编码，速度较慢，但结果精准。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -ss 00:00:30 -t 10 -c:v libx264 -c:a copy output.mp4</pre></div>
-<p><em>精确截取从 30 秒处开始的 10 秒内容。</em></p>
 </li>
 </ol>
-<h2>视频合并</h2>
-<p>合并视频与音频（不重新编码，速度快）：</p>
+<h2>3. 视频合并</h2>
+<h3>无损合并（流拷贝）</h3>
+<p>将视频流和音频流直接合并到新容器，不重新编码，速度极快。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i video.mp4 -i audio.mp3 -c copy -map 0:v:0 -map 1:a:0 output.mp4</pre></div>
-<p>合并视频与音频（重新编码，可调整编码参数）：</p>
+<h3>重编码合并</h3>
+<p>合并时重新编码，可用于调整编码参数或解决兼容性问题。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i video.mp4 -i audio.mp3 -c:v libx264 -c:a aac output.mp4</pre></div>
-<p>合并多个视频文件（需要先创建一个文本文件列表 <code class="notranslate">list.txt</code>）：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> list.txt 示例</span>
-<span class="pl-c"><span class="pl-c">#</span> file 'video1.mp4'</span>
-<span class="pl-c"><span class="pl-c">#</span> file 'video2.mp4'</span>
-<span class="pl-c"><span class="pl-c">#</span> file 'video3.mp4'</span>
-
-ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp4</pre></div>
-<h2>视频格式转换</h2>
-<p>更换容器格式（不改变编码，速度快）：</p>
+<h3>合并多个视频片段</h3>
+<p>首先，创建一个文本文件（如 <code class="notranslate">list.txt</code>），列出所有要合并的视频文件路径：</p>
+<pre lang="text" class="notranslate"><code class="notranslate"># list.txt
+file 'video1.mp4'
+file 'video2.mp4'
+file 'video3.mp4'
+</code></pre>
+<p>然后使用 <code class="notranslate">concat</code> 分离器进行合并：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp4</pre></div>
+<h2>4. 视频格式转换</h2>
+<h3>转换容器格式（流拷贝）</h3>
+<p>仅更换文件容器（如 MP4 转 MKV），不改变音视频编码，速度快且无损画质。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c copy output.mkv</pre></div>
-<p>更改视频编码：</p>
+<h3>重编码视频</h3>
+<p>更改视频编码格式（如转换为 H.264），可用于压缩或兼容特定设备。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -c:a copy output.mp4</pre></div>
-<h2>视频压缩</h2>
+<h2>5. 视频压缩</h2>
+<p>视频压缩通常涉及在文件大小和画质之间进行权衡。FFmpeg 提供了多种模式来控制这一过程。</p>
 <h3>CRF（恒定质量编码）</h3>
-<p>使用 CRF（Constant Rate Factor）方式压缩视频，数值范围 0-51（值越大压缩率越高，画质越低，18-28 是推荐范围）。该模式通过动态分配比特率实现质量优先的压缩：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -tune film -preset medium -crf 23 -c:a copy output.mp4</pre></div>
+<p>推荐模式。通过动态分配比特率来保持视觉质量，数值越低画质越好（0-51，推荐 18-28）。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -preset medium -crf 23 -c:a copy output.mp4</pre></div>
+<ul>
+<li><code class="notranslate">-preset</code>: 编码速度与压缩率的平衡（<code class="notranslate">ultrafast</code>, <code class="notranslate">fast</code>, <code class="notranslate">medium</code>, <code class="notranslate">slow</code>, <code class="notranslate">veryslow</code>）。越慢，压缩率越高，文件越小。</li>
+</ul>
 <h3>CBR（恒定比特率）</h3>
-<p>适用于需要固定带宽的场景（如直播推流），通过强制限定比特率保持数据流稳定。需配合 <code class="notranslate">bufsize</code> 参数控制缓冲区大小：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -b:v 4000k -maxrate 4000k -minrate 4000k -bufsize 2000k -c:a copy output.mp4</pre></div>
+<p>适用于需要固定带宽的场景（如直播推流），通过强制限定比特率保持数据流稳定。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v libx264 -b:v 4000k -maxrate 4000k -minrate 4000k -bufsize 4000k -c:a copy output.mp4</pre></div>
 <ul>
-<li><code class="notranslate">-b:v</code>：视频比特率。</li>
-<li><code class="notranslate">-maxrate</code>：最大比特率。</li>
-<li><code class="notranslate">-minrate</code>：最小比特率。</li>
-<li><code class="notranslate">-bufsize</code>：缓冲区大小。</li>
+<li><code class="notranslate">-b:v</code>: 目标视频比特率。</li>
+<li><code class="notranslate">-maxrate</code> / <code class="notranslate">-minrate</code>: 最大/最小比特率。</li>
+<li><code class="notranslate">-bufsize</code>: 缓冲区大小，通常设为比特率的 1-2 倍。</li>
 </ul>
-<h2>视频帧率调整</h2>
-<h3>简单更改帧率</h3>
+<h2>6. 视频帧率调整</h2>
+<h3>基础帧率转换</h3>
+<p>通过直接丢帧或复制帧来改变帧率，<strong>可能导致画面卡顿或动作不连贯</strong>，适用于对流畅度要求不高的场景。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -r 30 output.mp4</pre></div>
-<p>这会将视频帧率设置为 30fps，通过丢弃或重复帧来实现。<strong>注意：可能导致视频播放不流畅。</strong></p>
-<h3>保持质量的帧率转换</h3>
+<h3>高质量帧率转换（重编码）</h3>
+<p>通过重新编码来生成新的帧，能获得更平滑的过渡效果，但速度较慢。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -r 30 -c:v libx264 -preset slow -crf 18 -c:a copy output.mp4</pre></div>
-<p>这种方式可以获得较好的质量，使用 <code class="notranslate">libx264</code> 编码器，质量参数 <code class="notranslate">crf</code> 值越小质量越高（18-23 通常是比较好的选择）。</p>
 <ul>
-<li><code class="notranslate">-preset slow</code>：使用较慢的编码预设，以获得更好的质量。</li>
+<li><code class="notranslate">-preset slow</code>: 使用较慢的编码预设，以获得更好的压缩效率和质量。</li>
 </ul>
-<h2>提取音频</h2>
-<p>从视频中提取音频：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -vn -c:a copy output.mp3</pre></div>
+<h2>7. 提取音频</h2>
+<h3>提取音频（流拷贝）</h3>
+<p>直接复制原始音频流，速度快且无损。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -vn -c:a copy output.aac</pre></div>
 <ul>
-<li><code class="notranslate">-vn</code>：禁用视频流。</li>
+<li><code class="notranslate">-vn</code>: 禁用视频流。</li>
 </ul>
-<p>如需不同格式：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -vn -c:a aac output.aac</pre></div>
-<h2>使用 NVIDIA GPU 加速（NVENC）：</h2>
-<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p7 -rc vbr -cq 23 -maxrate 6M -bufsize 12M -rc-lookahead 20 -spatial_aq 1 -temporal_aq 1 -aq-strength 15 -c:a copy output.mp4</pre></div></div>
+<h3>提取音频并转换格式</h3>
+<p>如果原始音频格式不是目标格式（例如，从 MP4 提取为 MP3），则需要重编码音频流。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -vn -c:a mp3 -q:a 2 output.mp3</pre></div>
+<ul>
+<li><code class="notranslate">-q:a</code>: 设置音频质量（适用于 MP3 等有损格式，0-9，值越小质量越高）。</li>
+</ul>
+<h2>8. 使用 NVIDIA GPU 加速 (NVENC)</h2>
+<p>利用 NVIDIA GPU 的 NVENC 硬件编码器，可以大幅提升编码速度，尤其适合 4K 或高帧率视频的处理。以下是一个兼顾质量和速度的 HEVC (H.265) 编码示例：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ffmpeg -i input.mp4 -c:v hevc_nvenc -preset p7 -rc vbr -cq 23 -b:v 5M -maxrate 6M -bufsize 12M -c:a copy output.mp4</pre></div>
+<ul>
+<li><code class="notranslate">-c:v hevc_nvenc</code>: 使用 HEVC (H.265) NVENC 编码器。</li>
+<li><code class="notranslate">-preset p7</code>: 编码预设（p1 最快，p7 最慢最优质）。</li>
+<li><code class="notranslate">-rc vbr</code>: 可变比特率模式。</li>
+<li><code class="notranslate">-cq</code>: 恒定质量参数（类似 CRF，值越小质量越高）。</li>
+<li><code class="notranslate">-b:v</code>, <code class="notranslate">-maxrate</code>, <code class="notranslate">-bufsize</code>: 配合 VBR 模式使用的比特率控制参数。</li>
+</ul></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>
