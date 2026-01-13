@@ -114,7 +114,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h3>如何删除（撤销）规则？</h3>
 <p>如果你不再需要这个规则，可以使用以下命令将其删除。同样需要管理员权限。</p>
 <div class="highlight highlight-source-powershell"><pre class="notranslate"><span class="pl-c1">Remove-NetFirewallRule</span> <span class="pl-k">-</span>DisplayName <span class="pl-s"><span class="pl-pds">"</span>Allow TCP Inbound 13477<span class="pl-pds">"</span></span></pre></div>
-<p>执行后，该规则就会被永久删除。</p></div>
+<p>执行后，该规则就会被永久删除。</p>
+<h3>放行ICMP（允许被ping）</h3>
+<p>Windows系统默认不允许被ping，要想被ping，需要放行ICMP协议，放行ICMP需要分别放行IPv4和IPv6，以下是命令。</p>
+<p>放行ICMPv4：</p>
+<div class="highlight highlight-source-powershell"><pre class="notranslate"><span class="pl-c1">New-NetFirewallRule</span> <span class="pl-k">-</span>DisplayName <span class="pl-s"><span class="pl-pds">"</span>Allow ICMPv4 Inbound<span class="pl-pds">"</span></span> <span class="pl-k">-</span>Direction Inbound <span class="pl-k">-</span>Protocol ICMPv4 <span class="pl-k">-</span>Action Allow <span class="pl-k">-</span>Profile Any</pre></div>
+<p>放行ICMPv6：</p>
+<div class="highlight highlight-source-powershell"><pre class="notranslate"><span class="pl-c1">New-NetFirewallRule</span> <span class="pl-k">-</span>DisplayName <span class="pl-s"><span class="pl-pds">"</span>Allow ICMPv6 Inbound<span class="pl-pds">"</span></span> <span class="pl-k">-</span>Direction Inbound <span class="pl-k">-</span>Protocol ICMPv6 <span class="pl-k">-</span>Action Allow <span class="pl-k">-</span>Profile Any</pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>

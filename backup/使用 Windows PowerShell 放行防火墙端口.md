@@ -34,3 +34,19 @@ Remove-NetFirewallRule -DisplayName "Allow TCP Inbound 13477"
 ```
 
 执行后，该规则就会被永久删除。
+
+### 放行ICMP（允许被ping）
+
+Windows系统默认不允许被ping，要想被ping，需要放行ICMP协议，放行ICMP需要分别放行IPv4和IPv6，以下是命令。
+
+放行ICMPv4：
+
+```powershell
+New-NetFirewallRule -DisplayName "Allow ICMPv4 Inbound" -Direction Inbound -Protocol ICMPv4 -Action Allow -Profile Any
+```
+
+放行ICMPv6：
+
+```powershell
+New-NetFirewallRule -DisplayName "Allow ICMPv6 Inbound" -Direction Inbound -Protocol ICMPv6 -Action Allow -Profile Any
+```
