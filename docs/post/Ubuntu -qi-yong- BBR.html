@@ -95,8 +95,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>如果输出的版本号低于 <code class="notranslate">4.9.0</code>，请先升级内核。</p>
 <h2>2. 修改系统配置</h2>
 <p>接下来，修改系统配置文件 <code class="notranslate">/etc/sysctl.conf</code> 来启用 BBR。执行以下命令，将所需配置追加到文件末尾：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>net.core.default_qdisc=fq<span class="pl-pds">'</span></span> <span class="pl-k">|</span> sudo tee -a /etc/sysctl.conf
-<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>net.ipv4.tcp_congestion_control=bbr<span class="pl-pds">'</span></span> <span class="pl-k">|</span> sudo tee -a /etc/sysctl.conf</pre></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>net.core.default_qdisc=fq<span class="pl-pds">'</span></span> <span class="pl-k">|</span> tee -a /etc/sysctl.conf
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>net.ipv4.tcp_congestion_control=bbr<span class="pl-pds">'</span></span> <span class="pl-k">|</span> tee -a /etc/sysctl.conf</pre></div>
 <p>这两行配置的作用分别是：</p>
 <ul>
 <li><code class="notranslate">net.core.default_qdisc=fq</code>：将默认的队列调度算法设置为 <code class="notranslate">fq</code>（Fair Queueing）。</li>
@@ -132,7 +132,7 @@ if(""!=""){
     var startSite=new Date("");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
-    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
 }
 </script></div>
 </body>

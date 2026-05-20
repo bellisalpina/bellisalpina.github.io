@@ -17,8 +17,8 @@ uname -r
 接下来，修改系统配置文件 `/etc/sysctl.conf` 来启用 BBR。执行以下命令，将所需配置追加到文件末尾：
 
 ```bash
-echo 'net.core.default_qdisc=fq' | sudo tee -a /etc/sysctl.conf
-echo 'net.ipv4.tcp_congestion_control=bbr' | sudo tee -a /etc/sysctl.conf
+echo 'net.core.default_qdisc=fq' | tee -a /etc/sysctl.conf
+echo 'net.ipv4.tcp_congestion_control=bbr' | tee -a /etc/sysctl.conf
 ```
 
 这两行配置的作用分别是：
