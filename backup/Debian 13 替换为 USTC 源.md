@@ -6,31 +6,37 @@
 
 ### 1. 备份原有源列表
 
-在进行任何修改前，建议先备份原有的源文件。
-
 ```bash
 cp /etc/apt/sources.list /etc/apt/sources.list.bak
 ```
 
-### 2. 写入新的源列表
-
-以下命令会直接覆盖 `/etc/apt/sources.list` 文件。
+### 2. 删除传统格式的源
 
 ```bash
-cat <<'EOF' >/etc/apt/sources.list
-deb http://mirrors.ustc.edu.cn/debian trixie main contrib non-free non-free-firmware
+rm /etc/apt/sources.list
+```
 
-deb http://mirrors.ustc.edu.cn/debian trixie-updates main contrib non-free non-free-firmware
+### 3. 写入DEB822格式的新的源
 
-deb http://mirrors.ustc.edu.cn/debian trixie-backports main contrib non-free non-free-firmware
+```bash
+cat <<'EOF' >/etc/apt/sources.list.d/debian.sources
+Types: deb
+URIs: https://mirrors.ustc.edu.cn/debian
+Suites: trixie trixie-updates trixie-backports
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
-deb http://mirrors.ustc.edu.cn/debian-security trixie-security main contrib non-free non-free-firmware
+Types: deb
+URIs: https://mirrors.ustc.edu.cn/debian-security
+Suites: trixie-security
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 EOF
 ```
 
 ### 3. 更新软件包列表
 
-源文件替换后，必须执行更新命令，使新的源生效。
+执行更新命令，使新的源生效。
 
 ```bash
 apt update

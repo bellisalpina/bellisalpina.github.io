@@ -91,21 +91,25 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>为了提升软件包下载速度，可以将 Debian 13 的默认软件源替换为中科大（USTC）的镜像源。</p>
 <h2>操作步骤</h2>
 <h3>1. 备份原有源列表</h3>
-<p>在进行任何修改前，建议先备份原有的源文件。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">cp /etc/apt/sources.list /etc/apt/sources.list.bak</pre></div>
-<h3>2. 写入新的源列表</h3>
-<p>以下命令会直接覆盖 <code class="notranslate">/etc/apt/sources.list</code> 文件。</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-s"><span class="pl-k">&lt;&lt;</span>'<span class="pl-k">EOF</span>' &gt;/etc/apt/sources.list</span>
-<span class="pl-s">deb http://mirrors.ustc.edu.cn/debian trixie main contrib non-free non-free-firmware</span>
+<h3>2. 删除传统格式的源</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">rm /etc/apt/sources.list</pre></div>
+<h3>3. 写入DEB822格式的新的源</h3>
+<div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-s"><span class="pl-k">&lt;&lt;</span>'<span class="pl-k">EOF</span>' &gt;/etc/apt/sources.list.d/debian.sources</span>
+<span class="pl-s">Types: deb</span>
+<span class="pl-s">URIs: https://mirrors.ustc.edu.cn/debian</span>
+<span class="pl-s">Suites: trixie trixie-updates trixie-backports</span>
+<span class="pl-s">Components: main contrib non-free non-free-firmware</span>
+<span class="pl-s">Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg</span>
 <span class="pl-s"></span>
-<span class="pl-s">deb http://mirrors.ustc.edu.cn/debian trixie-updates main contrib non-free non-free-firmware</span>
-<span class="pl-s"></span>
-<span class="pl-s">deb http://mirrors.ustc.edu.cn/debian trixie-backports main contrib non-free non-free-firmware</span>
-<span class="pl-s"></span>
-<span class="pl-s">deb http://mirrors.ustc.edu.cn/debian-security trixie-security main contrib non-free non-free-firmware</span>
+<span class="pl-s">Types: deb</span>
+<span class="pl-s">URIs: https://mirrors.ustc.edu.cn/debian-security</span>
+<span class="pl-s">Suites: trixie-security</span>
+<span class="pl-s">Components: main contrib non-free non-free-firmware</span>
+<span class="pl-s">Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg</span>
 <span class="pl-s"><span class="pl-k">EOF</span></span></pre></div>
 <h3>3. 更新软件包列表</h3>
-<p>源文件替换后，必须执行更新命令，使新的源生效。</p>
+<p>执行更新命令，使新的源生效。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">apt update</pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
