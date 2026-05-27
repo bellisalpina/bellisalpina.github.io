@@ -1,5 +1,42 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Wed, 27 May 2026 11:06:15 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>在 Debian 上安装 Docker Engine</title><link>https://bellisalpina.github.io/post/zai-%20Debian%20-shang-an-zhuang-%20Docker%20Engine.html</link><description># 在 Debian 上安装 Docker Engine
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Bellisalpina</title><link>https://bellisalpina.github.io</link><description>Meet me in the afterglow</description><copyright>Bellisalpina</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://s2.loli.net/2024/10/09/nZ3z81Mu4OIFshE.jpg</url><title>avatar</title><link>https://bellisalpina.github.io</link></image><lastBuildDate>Wed, 27 May 2026 12:06:32 +0000</lastBuildDate><managingEditor>Bellisalpina</managingEditor><ttl>60</ttl><webMaster>Bellisalpina</webMaster><item><title>Debian 13 安装 Tailscale</title><link>https://bellisalpina.github.io/post/Debian%2013%20-an-zhuang-%20Tailscale.html</link><description># Debian 13 安装 Tailscale
+
+## 安装步骤
+
+### 1. 添加 Tailscale 的 GPG Key
+
+先创建 keyring 目录，并下载 Tailscale 的签名密钥：
+
+```bash
+mkdir -p --mode=0755 /usr/share/keyrings
+curl -fsSL https://pkgs.tailscale.com/stable/debian/trixie.noarmor.gpg -o /usr/share/keyrings/tailscale-archive-keyring.gpg
+```
+
+### 2. 添加 Tailscale 软件源
+
+将 Tailscale 仓库添加到 APT 源列表中：
+
+```bash
+echo 'deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://mirrors.ustc.edu.cn/tailscale/debian trixie main' &gt;/etc/apt/sources.list.d/tailscale.list
+```
+
+### 3. 更新软件索引并安装 Tailscale
+
+刷新软件包索引，然后安装 Tailscale：
+
+```bash
+apt update &amp;&amp; apt install tailscale
+```
+
+### 4. 启动 Tailscale
+
+安装完成后，启动并登录 Tailscale：
+
+```bash
+tailscale up
+```
+
+执行后通常会输出一个登录链接，打开链接并使用账号完成认证即可。</description><guid isPermaLink="true">https://bellisalpina.github.io/post/Debian%2013%20-an-zhuang-%20Tailscale.html</guid><pubDate>Wed, 27 May 2026 12:04:32 +0000</pubDate></item><item><title>在 Debian 上安装 Docker Engine</title><link>https://bellisalpina.github.io/post/zai-%20Debian%20-shang-an-zhuang-%20Docker%20Engine.html</link><description># 在 Debian 上安装 Docker Engine
 
 ## 1. 卸载旧版本（可选）
 
