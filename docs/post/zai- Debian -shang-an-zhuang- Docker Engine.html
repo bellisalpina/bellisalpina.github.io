@@ -103,13 +103,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h3>第二步：添加 Docker 的官方 GPG 密钥</h3>
 <p>GPG 密钥用于验证下载软件包的完整性。创建一个目录来存放密钥，并下载官方密钥：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 chmod a+r /etc/apt/keyrings/docker.asc</pre></div>
-<h3>第三步：添加 Docker 仓库到 Apt 源</h3>
+<h3>第三步：添加 Docker 仓库到 APT 源</h3>
 <p>接下来，将 Docker 的仓库配置写入 <code class="notranslate">docker.sources</code> 文件。</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">cat <span class="pl-s"><span class="pl-k">&lt;&lt;</span><span class="pl-k">EOF</span> &gt;/etc/apt/sources.list.d/docker.sources</span>
 <span class="pl-s">Types: deb</span>
-<span class="pl-s">URIs: https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian</span>
+<span class="pl-s">URIs: https://mirrors.ustc.edu.cn/docker-ce/linux/debian</span>
 <span class="pl-s">Suites: <span class="pl-s"><span class="pl-pds">$(</span>. /etc/os-release <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$VERSION_CODENAME</span><span class="pl-pds">"</span></span><span class="pl-pds">)</span></span></span>
 <span class="pl-s">Components: stable</span>
 <span class="pl-s">Architectures: <span class="pl-s"><span class="pl-pds">$(</span>dpkg --print-architecture<span class="pl-pds">)</span></span></span>
